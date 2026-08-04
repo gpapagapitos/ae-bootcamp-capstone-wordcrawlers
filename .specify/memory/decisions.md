@@ -1,74 +1,84 @@
 # Decisions
 
-Key design and process decisions made during development. Ordered by date; most recent
-first. Consult before opening a spec or starting implementation work.
+Running log of decisions recorded during spec and implementation sessions. New entries go
+at the top. Each entry notes what was decided, what was rejected, and which spec captures
+the requirement — so that future sessions can trace *why* the code is the way it is.
 
 ---
 
-## 2026-08-04 — Board game rules fidelity level
+## Session: Rules fidelity pass → spec 009
 
-Decision: **Hybrid fidelity** (spec 009).
-Keep the roguelite framing (branching map, meta-progression, hero kits, save/resume) but
-replace core combat/economy rules with the literal Paperback Adventures board-game systems
-wherever an equivalent exists.
+**Fidelity level: Hybrid.**
+After reviewing the Paperback Adventures rulebook against specs 001–003, we chose Hybrid:
+keep the roguelite run structure (map, meta-progression, heroes, save/resume) and replace
+core combat/economy with literal board-game systems wherever one exists.
 
-Implications:
-- Splay direction (left/right) is now required for every word submission.
-- Top-card-only ability + fatigue replaces the earlier "lowest rarity fatigues" rule.
-- Hex and Boon replace the earlier single-resource model.
-- Enemy Vowel pseudo-card is a formal mechanic, not an optional flourish.
-- Repeat-word penalty is fully removed — the board game has no such rule.
-- Spec 009 supersedes conflicting requirements in specs 001–003.
+Rejected: Full simulation (too much scope drift from roguelite framing). Pure adaptation
+(would lose the distinctive Paperback feel that motivated the project).
 
----
-
-## 2026-07-31 — Repeat-word penalty dropped
-
-Decision: penalty removed, aligning with spec 009 ruling above.
-Previous decision (−10% per repeat, capped at −40%) is superseded; do not re-introduce.
+Immediate spec implications recorded in spec 009:
+- Splay direction (left/right) required for every word — top card determines ability and fatigue target.
+- Top-card-only fatigue replaces the earlier "fatigue lowest-rarity card" rule from spec 001.
+- Hex + Boon dual resource replaces single-resource model.
+- Enemy Vowel pseudo-card is now a formal mechanic.
+- Repeat-word penalty removed — the board game has no such rule (see next entry).
 
 ---
 
-## 2026-07-31 — Dictionary strictness
+## Session: Spec 001 clarifications → repeat-word penalty
 
-Decision: strict local word set only (MVP). No fuzzy matching.
-Rationale: core skill expression is vocabulary; fuzzy mode blurs that.
-Post-MVP: fuzzy/accessibility mode may be added as an opt-in flag.
-
----
-
-## 2026-07-31 — Combat pacing target
-
-Decision: "snappy tactical" — fast turn resolution, meaningful sequencing.
-Slay the Spire-style decision quality; Balatro-like flow speed.
-Max acceptable turn resolution after word submit: 8 seconds.
+**Repeat-word penalty dropped.**
+Earlier clarification added −10% per repeat capped at −40%. After studying the rulebook,
+the top-card fatigue rule already creates natural word-reuse pressure (the top letter
+fatigues, so the same word costs you a different card each time). Adding a numeric penalty
+on top was both non-canonical and redundant. Removed in spec 001 Resolved Decisions.
 
 ---
 
-## 2026-07-31 — Frontend rendering stack
+## Session: Spec 003 scope lock
 
-Decision: React + Vite + Zustand. PixiJS for effects.
-Rejected: Godot (toolchain split), Three.js (overkill for 2D card UI).
-See `docs/stack-decision.md` for full rationale.
+**MVP scope locked.**
+One act + boss, two heroes (Duelist + Arcanist), strict dictionary, snappy tactical pacing,
+dark pulp visual language. See spec 003 for full exit criteria and change control process.
 
----
-
-## 2026-07-31 — Two heroes in MVP, one act + boss
-
-Decision: Duelist and Arcanist. One act, one boss.
-Rationale: replayability without overproducing content before core loop is validated.
+Considered alternatives:
+- Two acts: ruled out — content authoring effort before core loop is validated.
+- Three heroes: ruled out — same reason.
+- Fuzzy dictionary: ruled out for default mode; may return as accessibility opt-in post-MVP.
 
 ---
 
-## 2026-07-31 — Save envelope format
+## Session: Spec 001 clarifications → dictionary and Y
 
-Decision: schema-versioned JSON with CRC32 checksum, stored in localStorage.
-Two slots: `current` and `previous` (auto-backup). Atomic temp→current write.
-Cloud save out of scope for MVP.
+**Strict local word set only for MVP.**
+Core skill expression is vocabulary and deckbuilding, not approximate spelling. Strict mode
+preserves that. Y is auto-classified by dictionary validity (aligns with the board game FAQ
+"whichever is friendliest to the player" guidance).
 
 ---
 
-## 2026-07-31 — Y classification in dictionary
+## Session: Stack decision → docs/stack-decision.md
 
-Decision: auto-classified by dictionary validity; no player toggle in MVP.
-Aligns with the board game FAQ "whichever is friendliest to the player" policy.
+**Frontend stack: React + Vite + Zustand + PixiJS.**
+Rejected Godot (parallel toolchain splits TypeScript test investment) and Three.js
+(overkill for 2D card-battler UX; slower iteration on dense text UI). PixiJS gives GPU
+effects while keeping one language. Full rationale in `docs/stack-decision.md`.
+
+---
+
+## Session: Spec 005 clarifications → save envelope
+
+**Schema-versioned JSON with CRC32 checksum, localStorage, atomic write.**
+Two save slots: `current` + `previous` (auto-backup before each write). Interrupted writes
+must never leave partially valid state — temp-file-then-rename pattern adapted for the
+browser storage API. Cloud save out of scope for MVP.
+
+---
+
+## Session: Spec 007 clarifications → map generation
+
+**Deterministic map generation from run seed.**
+Same seed must produce the same ActMap every time — required for save/resume determinism
+(spec 005). Map generation is pure: `generateAct1Map(seed): ActMap`. Route-fairness
+constraints (at least one rest before boss, shop reachable from any start) recorded in
+spec 007 tasks.

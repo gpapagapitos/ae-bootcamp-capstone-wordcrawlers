@@ -1,5 +1,9 @@
 # Patterns
 
+> These conventions were established incrementally during specs 001–005 and are
+> referenced by the constitution (§6 Testability, §7 Capstone completeness).
+> New patterns should be added here as they emerge; stale ones removed.
+
 ## Engine Functions
 
 Pure state-transition shape: `(state: RunState, ...args) => void | result`.

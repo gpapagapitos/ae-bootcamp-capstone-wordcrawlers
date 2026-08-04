@@ -21,7 +21,8 @@ export default [
     }
   },
   {
-    files: ['scripts/**/*.mjs'],
+    // vite.config.ts and scripts legitimately use Node globals
+    files: ['scripts/**/*.mjs', 'vite.config.ts'],
     languageOptions: {
       globals: {
         process: 'readonly',

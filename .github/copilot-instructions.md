@@ -1,5 +1,14 @@
 # Wordcrawlers Guidelines
 
+## SpecKit Memory
+The `.specify/memory/` directory holds context files maintained during spec-driven
+development. Read them before generating specs, plans, or implementation:
+
+- [constitution.md](../.specify/memory/constitution.md) — governing principles and working-file index
+- [architecture.md](../.specify/memory/architecture.md) — module boundaries, state flow, invariants
+- [patterns.md](../.specify/memory/patterns.md) — coding conventions established during implementation
+- [decisions.md](../.specify/memory/decisions.md) — design decisions recorded during spec sessions
+
 ## Architecture
 - `src/engine/**` is pure game logic (no React/DOM); `src/app/**` (stores, components) is
   the UI/state layer that wraps it. Keep that boundary — engine functions take/return

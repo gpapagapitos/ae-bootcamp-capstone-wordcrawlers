@@ -1,5 +1,9 @@
 # Architecture
 
+> Established during spec 001 (core run) and refined through specs 005–009.
+> The engine/app boundary emerged from the spec 001 testability principle (constitution §6)
+> and the save/resume determinism requirement in spec 005.
+
 ## Module Boundaries
 
 `src/engine/` is the pure game logic layer — no React, no DOM, no stores. Functions take

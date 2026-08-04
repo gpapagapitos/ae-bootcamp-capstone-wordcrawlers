@@ -33,3 +33,14 @@ Build a fun, replayable, word-based roguelite with strategic deckbuilding, clear
 7. Capstone completeness
 - Include product docs, architecture notes, test strategy, and CI checks.
 - Show explicit traceability from requirements to implementation and tests.
+
+## Working Files
+
+These memory files are maintained alongside specs and updated as the project evolves:
+
+- [architecture.md](architecture.md) — module boundaries, state flow, invariants
+- [patterns.md](patterns.md) — coding conventions established during implementation
+- [decisions.md](decisions.md) — design decisions recorded during spec sessions
+
+When working from a new session, read constitution → decisions → architecture before
+opening any spec. This gives you the reasoning behind the code, not just the rules.
