@@ -21,20 +21,25 @@ Implementation guardrail for new content proposals: docs/content-canon-checklist
 ## Factions
 
 ### The Binding Order
+
 Caretakers of the Lexicon Vault; believe old language must be cataloged before the wild surface can be trusted.
 
 ### The Inkbound
+
 Rogue spellwrights who weaponize unstable words and overgrown relics.
 
 ### The Quiet Press
+
 Silent archivists preserving forbidden chapter-fragments and seed-memory records.
 
 ## Hero Stubs
 
 ### Duelist
+
 A vault-forged pathfinder who cuts routes through the reclaimed wilds.
 
 ### Arcanist
+
 A root-sage who implants hexes into enemies and bends living language.
 
 ## Letters as Cards
@@ -52,18 +57,22 @@ Letters are the smallest playable artifacts in the game. They should feel like f
 ### Card Roles
 
 1. Builder cards
+
 - Basic letters used to form words and satisfy strict dictionary rules.
 - Flavor: field stones, bark shards, seed-stamps, scratched tags.
 
 2. Tactic cards
+
 - Modify how letters behave this turn or next turn.
 - Examples: draw, lock, recycle, refine, sharpen, preserve.
 
 3. Relic cards
+
 - Persistent or high-impact effects that define a run.
 - Examples: bonus damage for repeated roots, extra draw after long words, hex on rare letters.
 
 4. Reaction cards
+
 - Trigger when a word is submitted, when damage is dealt, or when a turn resolves.
 - Examples: refund energy, convert block into damage, cleanse fatigue, echo a letter.
 

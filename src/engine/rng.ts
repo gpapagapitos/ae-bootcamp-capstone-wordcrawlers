@@ -11,7 +11,7 @@ export function createRng(seed: number): Rng {
       state ^= state >>> 17;
       state ^= state << 5;
       return (state >>> 0) / 0xffffffff;
-    }
+    },
   };
 }
 

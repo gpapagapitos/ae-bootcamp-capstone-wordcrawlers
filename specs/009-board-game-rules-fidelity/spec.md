@@ -1,15 +1,18 @@
 # Spec 009: Board Game Rules Fidelity Contract
 
 ## Status
+
 Approved — supersedes conflicting rules in specs 001–003; splay, hex/boon, top-card fatigue, and Enemy Vowel implemented in src/engine/
 
 ## Source of Truth
+
 `docs/Paperback_Adventures_rulebook.pdf` (24 pages, full rules + errata). This spec is the
 authoritative synthesis of that rulebook into Wordcrawlers terms. Where this spec and any
 earlier spec (001-008) conflict on core combat mechanics, this spec wins; earlier specs are
 amended (see "Amendments to Existing Specs" below).
 
 ## Goal
+
 Reconcile the adapted roguelite design (specs 001-003) with the literal card-game mechanics
 of Paperback Adventures, per the "Hybrid" fidelity decision: keep the roguelite run
 structure (branching map, meta-progression, hero kits, save/resume) but replace the
@@ -39,6 +42,7 @@ core combat/economy rules with the literal board game systems wherever one exist
 ## Adopted Literal Core Mechanics
 
 ### R1 Card Anatomy (Dual-Edge + Splay)
+
 - Every Letter card shall define a left-edge value set and a right-edge value set, each
   composed of `hits`, `blocks`, and `energy` counts.
 - When forming a word, the player shall choose a splay direction: **left** or **right**.
@@ -50,6 +54,7 @@ core combat/economy rules with the literal board game systems wherever one exist
 - Engine shall reject word submission without an explicit splay direction.
 
 ### R2 Top-Card Ability and Fatigue
+
 - Only the top card of the played word activates its ability text.
 - During Cleanup, the top card (and only the top card) moves to the fatigue pile, unusable
   for the remainder of the encounter (not shuffled back at draw-exhaustion).
@@ -67,6 +72,7 @@ core combat/economy rules with the literal board game systems wherever one exist
   instead (they are not zone-tracked, so there is nothing to move).
 
 ### R3 Wild Cards and Letter-of-Choice Cards
+
 - Each hero has access to a Wild card that is always available to help spell a word, is
   never in hand, never enters deck/discard/fatigue, and contributes no hits/blocks/energy.
 - Playing a word **without** using the Wild card grants +1 energy at end of turn.
@@ -75,6 +81,7 @@ core combat/economy rules with the literal board game systems wherever one exist
   returned to a shared pool after use.
 
 ### R4 Hex and Boon Dual Resource
+
 - Hero state shall track `hex` and `boon` counters in addition to `hp`, `block`, `energy`.
 - Enemy state shall track `hex` and `boon` counters in addition to `hp`, `block`.
 - Hex negatively affects its holder; some enemy actions apply hex to the hero, some hero
@@ -83,7 +90,7 @@ core combat/economy rules with the literal board game systems wherever one exist
   hex, which resets to zero at Character Development).
 - Boons are the currency spent at Shop nodes (see R9).
 - **FAQ clarification (spend-hexes wording)**: when an item/Core Card effect says to
-  "spend hexes," it means the hexes the hero has applied to the *enemy* (i.e. remove them
+  "spend hexes," it means the hexes the hero has applied to the _enemy_ (i.e. remove them
   from the enemy's hex counter), not any hex on the hero. A hex-keyed Core Card (R9)
   should read as: convert N hex currently on the enemy into an effect (e.g. HP loss equal
   to hex spent), gated by an energy-tier cost table, and the player never gets to choose a
@@ -91,6 +98,7 @@ core combat/economy rules with the literal board game systems wherever one exist
   triggers at its full, hex-count-driven magnitude or not at all if the energy tier isn't met.
 
 ### R5 Enemy Weak-Vowel Mechanic
+
 - Each enemy (unless its special rules say otherwise) exposes one weak-spot vowel drawn
   from its name.
 - While that enemy is active, the hero has access to an extra "Enemy Vowel" pseudo-card
@@ -100,6 +108,7 @@ core combat/economy rules with the literal board game systems wherever one exist
   encounter; it resets/returns at the start of the next encounter.
 
 ### R6 Penalty Cards
+
 - Certain rewards/enemy effects add a Penalty card to the hero's deck or discard pile.
 - Penalty cards provide no hits/blocks/energy and have no ability (pass-through per R2).
 - If a Penalty card remains in hand unplayed at Cleanup, its negative effect triggers
@@ -119,6 +128,7 @@ core combat/economy rules with the literal board game systems wherever one exist
   linguistic edge-case disputes).
 
 ### R7 Enemy Two-Stage Design
+
 - Each enemy (Lackey or Boss) defines Stage 1 and Stage 2 data: HP, intents, and special
   rules, which may differ between stages.
 - When Stage 1 HP reaches 0, the enemy flips to Stage 2: HP resets to the Stage 2 value
@@ -129,19 +139,21 @@ core combat/economy rules with the literal board game systems wherever one exist
   or effects resolve.
 - **FAQ clarification (intent index vs. stun, implemented)**: a stun, by itself, has no
   inherent effect on the enemy intent index. The intent index advances every turn
-  *unless* the enemy was stage-flipped that same turn (the flip's own reset to the first
+  _unless_ the enemy was stage-flipped that same turn (the flip's own reset to the first
   Stage 2 intent, above, is the only thing that suppresses the normal advance). A stun
   caused by any other unique card ability still lets the index advance normally at
   Cleanup, even though the enemy takes no action that turn.
 - **FAQ clarification (block vs. stun timing)**: enemy Block is generated as part of
-  resolving its action/intent, so a stun that lands *before* that action resolves (e.g. a
+  resolving its action/intent, so a stun that lands _before_ that action resolves (e.g. a
   Prep-phase item effect) prevents the Block from being granted at all. A stun applied
-  *after* the action already resolved (e.g. from combined Clash-phase hits reducing the
+  _after_ the action already resolved (e.g. from combined Clash-phase hits reducing the
   enemy to a stun-triggering condition) does not retroactively remove Block already
   granted that turn — only a future turn's action is skipped.
 
 ### R8 Character Development Sequence
+
 On defeating any enemy (Lackey or Boss), in order:
+
 1. Reset hero `hex` and `energy` to 0. Hero `hp` and `boon` carry over unchanged.
 2. Clear the enemy from the encounter slot; reset all enemy counters.
 3. Return any Enemy Vowel / Letter-of-Choice pseudo-cards to their shared pools.
@@ -156,6 +168,7 @@ On defeating any enemy (Lackey or Boss), in order:
    selecting it. When a reward offers "choose N to keep" from a larger revealed set, the
    cards not kept return to the bottom of the pool they were drawn from (or the top, if
    drawn from a McGuffin/Relic pool).
+
 - **FAQ clarification (retain effects)**: if a card/effect says to "retain" a card, that
   card stays in the hero's hand into the next turn (it is not discarded/fatigued at
   Cleanup) and the hero still draws their normal full hand size on top of it.
@@ -172,6 +185,7 @@ On defeating any enemy (Lackey or Boss), in order:
   the engine must not soft-lock in this state.
 
 ### R9 Items, Relics (McGuffins), and Core Cards
+
 - **Items**: cost energy (paid from the persistent energy counter, not from the current
   word's icons), usable once per turn during Prep. Some items are single-use per
   encounter (disabled after use, reset at Character Development); others are "rotated"
@@ -194,6 +208,7 @@ On defeating any enemy (Lackey or Boss), in order:
   effect magnitude.
 
 ### R10 Shop Mechanics
+
 - Shop costs are paid in boons.
 - Buying a Letter card **replaces** a card in the deck; the empty Shop slot refills from
   the hero's Library pool.
@@ -203,6 +218,7 @@ On defeating any enemy (Lackey or Boss), in order:
   offerings (not the Shop's fixed cost display).
 
 ### R11 Word Repetition
+
 - No penalty applies to repeating a previously played word. Word legality depends only on
   dictionary validity and available letters/splay, matching the rulebook.
 - **FAQ clarification (optional word play)**: the hero may choose to submit no word for a
@@ -210,6 +226,7 @@ On defeating any enemy (Lackey or Boss), in order:
   as normal — passing is not a way to also skip the enemy's turn.
 
 ### R12 Difficulty Modes (Training vs Standard)
+
 - The rulebook defines two baseline setups: **Training Mode** (easier, recommended for a
   player's first games) and **Standard Mode** (the default challenge level once a player
   is comfortable with the rules).
@@ -223,11 +240,12 @@ On defeating any enemy (Lackey or Boss), in order:
   Standard) analogous to the rulebook's guidance, distinct from post-MVP Plot Twists
   (which stack additional challenge on top of Standard Mode, not a replacement for it).
 - **Resolved**: hero baseline was rescaled (user-approved, see repo memory) to `hp: 20,
-  maxHp: 20` in `src/engine/state.ts`, matching the literal Standard Mode 20 HP baseline;
+maxHp: 20` in `src/engine/state.ts`, matching the literal Standard Mode 20 HP baseline;
   `energy: 3` remains a pure digital invention (R9 note) with no rulebook equivalent to
   reconcile against.
 
 ### R13 Library and Archive Content Pools
+
 - Each hero owns a fixed content pool split into two parts at setup: a 10-card starting
   deck (already modeled) and a separate ~50-card Library pool that is not shuffled into
   the deck at the start of a run.
@@ -260,30 +278,41 @@ On defeating any enemy (Lackey or Boss), in order:
 ## Updated Data Contracts (Target Shape)
 
 ```ts
-interface CardEdge { hits: number; blocks: number; energy: number; }
+interface CardEdge {
+  hits: number;
+  blocks: number;
+  energy: number;
+}
 interface Card {
   id: string;
   letter: string;
   left: CardEdge;
   right: CardEdge;
   ability?: string;
-  kind: 'letter' | 'wild' | 'letterOfChoice' | 'penalty' | 'enemyVowel';
+  kind: "letter" | "wild" | "letterOfChoice" | "penalty" | "enemyVowel";
   rarity: 1 | 2 | 3;
   tags: string[];
 }
 
 interface HeroState {
   id: HeroId;
-  hp: number; maxHp: number;
-  block: number; energy: number;
-  hex: number; boon: number;
+  hp: number;
+  maxHp: number;
+  block: number;
+  energy: number;
+  hex: number;
+  boon: number;
 }
 
 interface EnemyState {
-  id: string; name: string;
+  id: string;
+  name: string;
   stage: 1 | 2;
-  hp: number; maxHp: number;
-  block: number; hex: number; boon: number;
+  hp: number;
+  maxHp: number;
+  block: number;
+  hex: number;
+  boon: number;
   stunned: boolean;
   intentIndex: number;
   intents: EnemyIntent[];
@@ -371,6 +400,7 @@ digital rule (sleeving, envelopes, physical trays are intentionally not adopted,
 ## Implementation Status
 
 Implemented in engine + app layer:
+
 - R1 splay left/right with dual-edge (`left`/`right`) hits/blocks/energy resolution.
 - R2 top-card-only ability logging and top-card-only fatigue (`resolveTopCard`, `fatigueTopCard`).
 - R3 Wild Card: always-available pseudo-card (not in hand/deck), player assigns its letter
@@ -403,7 +433,7 @@ Implemented in engine + app layer:
   not modeled (see remaining gaps).
 - R10 Shop now prices and pays in boons (gold currency removed) and **replaces** a
   player-selected deck card instead of always adding one (`buyShopCard(cardId,
-  replaceCardId)`, `ShopModal.tsx` replace-target selection UI).
+replaceCardId)`, `ShopModal.tsx` replace-target selection UI).
 - R11 repeat-word penalty removed from engine, state, and tests.
 - R13 Reward/Shop/event card offers are drawn from a per-hero `LIBRARY_POOLS` letter set
   (`progressionStore.ts`), weighted to match each hero's starter-deck vowel/consonant
@@ -413,12 +443,15 @@ Implemented in engine + app layer:
   selection.
 
 Remaining gaps (tracked for a follow-up pass):
+
 - R8 Character Development is implicit (fresh per-encounter state naturally zeroes
   hex/energy) rather than an explicit function; single-use/rotated Item lifecycle beyond
   per-turn `usedThisTurn` reset is not modeled (no relic-vs-item rotation state yet).
-- R9 Boss Relics content, and a reward/shop flow that *grants* additional Relics
+- R9 Boss Relics content, and a reward/shop flow that _grants_ additional Relics
   mid-run, do not exist yet — each hero's single Relic is fixed at run start alongside
-  their 2 Core Items, not acquired.
+  their 2 Core Items, not acquired. **Tracked in `specs/011-relics-and-consumables/spec.md`**,
+  which also adds a new digital-only Consumable item tier (no rulebook equivalent, same
+  category of invention as Energy) on top of this gap.
 - R10/R8: Reward-card pickup (`pickReward`) still always **adds** a card rather than
   distinguishing Lackey-replaces vs. Boss-adds per R8 point 7 — Shop now replaces
   correctly, but the reward flow does not yet track which enemy type granted the reward.
@@ -439,6 +472,3 @@ Remaining gaps (tracked for a follow-up pass):
   addition doesn't outweigh the actively-spent Core Item pair.
 - Shop prices (4/7/11 boons by rarity, 5 to remove, 12 starting boon) were not changed;
   still internally consistent with the new per-hero Library pool letter values.
-
-
-

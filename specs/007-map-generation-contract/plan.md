@@ -9,18 +9,23 @@
 ## Modules
 
 1. src/app/map/generator.ts
+
 - Main map generation entrypoint returning graph structure.
 
 2. src/app/map/config.ts
+
 - Node distribution bounds and fairness thresholds.
 
 3. src/app/map/constraints.ts
+
 - Route analysis and fairness validation helpers.
 
 4. src/app/map/types.ts
+
 - Map node, edge, layer, and generation result types.
 
 5. src/app/components/MapScreen.tsx
+
 - Lookahead rendering and node metadata previews.
 
 ## Data Contracts

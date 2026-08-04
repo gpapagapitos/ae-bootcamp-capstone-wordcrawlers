@@ -1,5 +1,5 @@
 interface AbilityLine {
-  timing: 'submit' | 'clash' | 'cleanup';
+  timing: "submit" | "clash" | "cleanup";
   label: string;
   text: string;
 }
@@ -9,85 +9,85 @@ interface PreviewCard {
   letter: string;
   title: string;
   cost: number;
-  rarity: 'common' | 'uncommon' | 'rare';
-  role: 'attack' | 'control' | 'utility';
+  rarity: "common" | "uncommon" | "rare";
+  role: "attack" | "control" | "utility";
   ability: AbilityLine;
   reminder?: string;
 }
 
 interface RarityToken {
   sigil: string;
-  shape: 'circle' | 'diamond' | 'triangle';
+  shape: "circle" | "diamond" | "triangle";
   label: string;
 }
 
 const PREVIEW_CARDS: PreviewCard[] = [
   {
-    id: 'c-arc-blade',
-    letter: 'A',
-    title: 'Arc Blade',
+    id: "c-arc-blade",
+    letter: "A",
+    title: "Arc Blade",
     cost: 1,
-    rarity: 'common',
-    role: 'attack',
+    rarity: "common",
+    role: "attack",
     ability: {
-      timing: 'submit',
-      label: 'On Submit',
-      text: 'If this card is in your word, gain +2 attack.'
+      timing: "submit",
+      label: "On Submit",
+      text: "If this card is in your word, gain +2 attack.",
     },
-    reminder: 'Stacks with other attack boosts.'
+    reminder: "Stacks with other attack boosts.",
   },
   {
-    id: 'c-ink-hex',
-    letter: 'H',
-    title: 'Ink Hex',
+    id: "c-ink-hex",
+    letter: "H",
+    title: "Ink Hex",
     cost: 2,
-    rarity: 'uncommon',
-    role: 'control',
+    rarity: "uncommon",
+    role: "control",
     ability: {
-      timing: 'clash',
-      label: 'On Clash',
-      text: 'Give 2 Hex to the enemy. If enemy has 4+ Hex, stun it.'
+      timing: "clash",
+      label: "On Clash",
+      text: "Give 2 Hex to the enemy. If enemy has 4+ Hex, stun it.",
     },
-    reminder: 'Hex is stored on enemy and spent by effects.'
+    reminder: "Hex is stored on enemy and spent by effects.",
   },
   {
-    id: 'c-rune-spark',
-    letter: 'R',
-    title: 'Rune Spark',
+    id: "c-rune-spark",
+    letter: "R",
+    title: "Rune Spark",
     cost: 1,
-    rarity: 'rare',
-    role: 'utility',
+    rarity: "rare",
+    role: "utility",
     ability: {
-      timing: 'cleanup',
-      label: 'On Cleanup',
-      text: 'Draw 1 card next turn.'
-    }
-  }
+      timing: "cleanup",
+      label: "On Cleanup",
+      text: "Draw 1 card next turn.",
+    },
+  },
 ];
 
-function rarityClass(rarity: PreviewCard['rarity']): string {
+function rarityClass(rarity: PreviewCard["rarity"]): string {
   switch (rarity) {
-    case 'common':
-      return 'rarity-common';
-    case 'uncommon':
-      return 'rarity-uncommon';
-    case 'rare':
-      return 'rarity-rare';
+    case "common":
+      return "rarity-common";
+    case "uncommon":
+      return "rarity-uncommon";
+    case "rare":
+      return "rarity-rare";
     default:
-      return 'rarity-common';
+      return "rarity-common";
   }
 }
 
-function rarityToken(rarity: PreviewCard['rarity']): RarityToken {
+function rarityToken(rarity: PreviewCard["rarity"]): RarityToken {
   switch (rarity) {
-    case 'common':
-      return { sigil: 'I', shape: 'circle', label: 'common rarity token' };
-    case 'uncommon':
-      return { sigil: 'II', shape: 'diamond', label: 'uncommon rarity token' };
-    case 'rare':
-      return { sigil: 'III', shape: 'triangle', label: 'rare rarity token' };
+    case "common":
+      return { sigil: "I", shape: "circle", label: "common rarity token" };
+    case "uncommon":
+      return { sigil: "II", shape: "diamond", label: "uncommon rarity token" };
+    case "rare":
+      return { sigil: "III", shape: "triangle", label: "rare rarity token" };
     default:
-      return { sigil: 'I', shape: 'circle', label: 'common rarity token' };
+      return { sigil: "I", shape: "circle", label: "common rarity token" };
   }
 }
 
@@ -97,8 +97,8 @@ export function CardPreview() {
       <div className="card-preview-header">
         <h2>Card Readability Prototype</h2>
         <p>
-          Big letter anchor, short effect sentence, and consistent timing labels so players parse meaning
-          in one glance.
+          Big letter anchor, short effect sentence, and consistent timing labels
+          so players parse meaning in one glance.
         </p>
       </div>
       <div className="card-grid">
@@ -106,9 +106,18 @@ export function CardPreview() {
           const token = rarityToken(card.rarity);
 
           return (
-            <article key={card.id} className={`wc-card ${rarityClass(card.rarity)}`}>
-              <div className="wc-card-token" aria-label={token.label} role="img">
-                <span className="token-sigil" aria-hidden="true">{token.sigil}</span>
+            <article
+              key={card.id}
+              className={`wc-card ${rarityClass(card.rarity)}`}
+            >
+              <div
+                className="wc-card-token"
+                aria-label={token.label}
+                role="img"
+              >
+                <span className="token-sigil" aria-hidden="true">
+                  {token.sigil}
+                </span>
                 <span
                   className={`token-shape token-shape-${token.shape}`}
                   aria-hidden="true"
@@ -133,7 +142,9 @@ export function CardPreview() {
                   <span>{card.ability.label}</span>
                 </p>
                 <p className="ability-text">{card.ability.text}</p>
-                {card.reminder ? <p className="reminder-text">{card.reminder}</p> : null}
+                {card.reminder ? (
+                  <p className="reminder-text">{card.reminder}</p>
+                ) : null}
               </div>
             </article>
           );

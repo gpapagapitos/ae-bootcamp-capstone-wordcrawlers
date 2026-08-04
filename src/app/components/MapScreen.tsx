@@ -1,48 +1,48 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { describeBuff } from '../content/events.js';
-import { getSelectableNodeIds, resolveNodeLabel } from '../map/map.js';
-import type { MapNodeType } from '../map/types.js';
-import { useMapStore } from '../store/mapStore.js';
-import { useProgressionStore } from '../store/progressionStore.js';
+import { useEffect, useMemo, useRef, useState } from "react";
+import { describeBuff } from "../content/events.js";
+import { getSelectableNodeIds, resolveNodeLabel } from "../map/map.js";
+import type { MapNodeType } from "../map/types.js";
+import { useMapStore } from "../store/mapStore.js";
+import { useProgressionStore } from "../store/progressionStore.js";
 
 const NODE_STYLES: Record<MapNodeType, string> = {
-  battle: 'node node-battle',
-  elite: 'node node-elite',
-  event: 'node node-event',
-  treasure: 'node node-treasure',
-  shop: 'node node-shop',
-  rest: 'node node-rest',
-  boss: 'node node-boss'
+  battle: "node node-battle",
+  elite: "node node-elite",
+  event: "node node-event",
+  treasure: "node node-treasure",
+  shop: "node node-shop",
+  rest: "node node-rest",
+  boss: "node node-boss",
 };
 
 const NODE_ICONS: Record<MapNodeType, string> = {
-  battle: '\u2694',
-  elite: '\u2620',
-  event: '?',
-  treasure: '\u25C6',
-  shop: '\u26EA',
-  rest: '\u2726',
-  boss: '\u265A'
+  battle: "\u2694",
+  elite: "\u2620",
+  event: "?",
+  treasure: "\u25C6",
+  shop: "\u26EA",
+  rest: "\u2726",
+  boss: "\u265A",
 };
 
 function describeType(type: MapNodeType): string {
   switch (type) {
-    case 'battle':
-      return 'Standard combat encounter';
-    case 'elite':
-      return 'High-risk elite battle';
-    case 'event':
-      return 'Narrative event with choices';
-    case 'treasure':
-      return 'Treasure reward encounter';
-    case 'shop':
-      return 'Buy cards, remove cards, prep strategy';
-    case 'rest':
-      return 'Recover and tune your run';
-    case 'boss':
-      return 'Act-ending boss fight';
+    case "battle":
+      return "Standard combat encounter";
+    case "elite":
+      return "High-risk elite battle";
+    case "event":
+      return "Narrative event with choices";
+    case "treasure":
+      return "Treasure reward encounter";
+    case "shop":
+      return "Buy cards, remove cards, prep strategy";
+    case "rest":
+      return "Recover and tune your run";
+    case "boss":
+      return "Act-ending boss fight";
     default:
-      return 'Unknown encounter';
+      return "Unknown encounter";
   }
 }
 
@@ -61,7 +61,11 @@ const NODE_LINE_CLEARANCE_PX = 4;
  * so nodes never visually overlap regardless of viewport size, without shrinking them more
  * than necessary.
  */
-function computeNodeSize(points: Array<{ x: number; y: number; }>, stageWidth: number, stageHeight: number): number {
+function computeNodeSize(
+  points: Array<{ x: number; y: number }>,
+  stageWidth: number,
+  stageHeight: number,
+): number {
   if (!stageWidth || !stageHeight || points.length < 2) {
     return MAX_NODE_SIZE_PX;
   }
@@ -103,7 +107,7 @@ function trimToNodeEdges(
   segment: LineSegment,
   containerWidth: number,
   containerHeight: number,
-  edgeGapPx: number
+  edgeGapPx: number,
 ): LineSegment {
   if (!containerWidth || !containerHeight) {
     return segment;
@@ -132,7 +136,7 @@ function trimToNodeEdges(
     x1: (tx1 / containerWidth) * 100,
     y1: (ty1 / containerHeight) * 100,
     x2: (tx2 / containerWidth) * 100,
-    y2: (ty2 / containerHeight) * 100
+    y2: (ty2 / containerHeight) * 100,
   };
 }
 
@@ -142,7 +146,8 @@ interface MapScreenProps {
 }
 
 export function MapScreen({ onReroll, onEndRun }: MapScreenProps) {
-  const { map, currentNodeId, visitedNodeIds, selectNode, resetMap } = useMapStore();
+  const { map, currentNodeId, visitedNodeIds, selectNode, resetMap } =
+    useMapStore();
   const pendingBuff = useProgressionStore((state) => state.pendingBuff);
   const stageRef = useRef<HTMLDivElement>(null);
   const [stageSize, setStageSize] = useState({ width: 0, height: 0 });
@@ -154,7 +159,8 @@ export function MapScreen({ onReroll, onEndRun }: MapScreenProps) {
       return;
     }
 
-    const updateSize = () => setStageSize({ width: el.clientWidth, height: el.clientHeight });
+    const updateSize = () =>
+      setStageSize({ width: el.clientWidth, height: el.clientHeight });
     updateSize();
 
     const observer = new ResizeObserver(updateSize);
@@ -164,7 +170,7 @@ export function MapScreen({ onReroll, onEndRun }: MapScreenProps) {
 
   const selectable = useMemo(
     () => getSelectableNodeIds(map, currentNodeId, visitedNodeIds),
-    [map, currentNodeId, visitedNodeIds]
+    [map, currentNodeId, visitedNodeIds],
   );
 
   const { maxRow, maxLane } = useMemo(() => {
@@ -177,26 +183,34 @@ export function MapScreen({ onReroll, onEndRun }: MapScreenProps) {
     return { maxRow: row, maxLane: lane };
   }, [map.nodes]);
 
-  const nodeX = (node: { id: string; lane: number; }) => {
+  const nodeX = (node: { id: string; lane: number }) => {
     const span = 100 - NODE_X_MARGIN * 2;
-    const base = maxLane === 0 ? 50 : NODE_X_MARGIN + (node.lane / maxLane) * span;
+    const base =
+      maxLane === 0 ? 50 : NODE_X_MARGIN + (node.lane / maxLane) * span;
     return base + jitterFor(node.id);
   };
 
-  const nodeY = (node: { id: string; row: number; }) => {
+  const nodeY = (node: { id: string; row: number }) => {
     const span = 100 - NODE_Y_MARGIN * 2;
     const base = maxRow === 0 ? 90 : 90 - (node.row / maxRow) * span;
     return base + jitterFor(`${node.id}-y`);
   };
 
   const nodeSize = useMemo(() => {
-    const points = map.nodes.map((node) => ({ x: nodeX(node), y: nodeY(node) }));
+    const points = map.nodes.map((node) => ({
+      x: nodeX(node),
+      y: nodeY(node),
+    }));
     return computeNodeSize(points, stageSize.width, stageSize.height);
   }, [map.nodes, stageSize.width, stageSize.height, maxRow, maxLane]);
   const edgeGapPx = nodeSize / 2 + NODE_LINE_CLEARANCE_PX;
 
-  const currentNode = currentNodeId ? map.nodes.find((node) => node.id === currentNodeId) : null;
-  const tooltipNode = tooltipNodeId ? map.nodes.find((node) => node.id === tooltipNodeId) : null;
+  const currentNode = currentNodeId
+    ? map.nodes.find((node) => node.id === currentNodeId)
+    : null;
+  const tooltipNode = tooltipNodeId
+    ? map.nodes.find((node) => node.id === tooltipNodeId)
+    : null;
 
   return (
     <div className="screen-root map-layout">
@@ -204,10 +218,15 @@ export function MapScreen({ onReroll, onEndRun }: MapScreenProps) {
         <div className="map-title-block">
           <p className="eyebrow">Wordcrawlers</p>
           <h1>Act 1 Vault Route</h1>
-          {pendingBuff ? <p className="map-buff-badge">{describeBuff(pendingBuff)}</p> : null}
+          {pendingBuff ? (
+            <p className="map-buff-badge">{describeBuff(pendingBuff)}</p>
+          ) : null}
         </div>
         <div className="map-header-actions">
-          <button className="ink-button" onClick={() => (onReroll ? onReroll() : resetMap(Date.now()))}>
+          <button
+            className="ink-button"
+            onClick={() => (onReroll ? onReroll() : resetMap(Date.now()))}
+          >
             Reroll Seed
           </button>
           {onEndRun ? (
@@ -223,12 +242,19 @@ export function MapScreen({ onReroll, onEndRun }: MapScreenProps) {
           <p className="map-panel-label">Route Stage</p>
           <div className="map-panel-status">
             <span>Current</span>
-            <strong>{currentNode ? resolveNodeLabel(currentNode.type) : 'Start'}</strong>
+            <strong>
+              {currentNode ? resolveNodeLabel(currentNode.type) : "Start"}
+            </strong>
           </div>
         </div>
 
         <div className="map-stage" ref={stageRef}>
-          <svg className="map-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden>
+          <svg
+            className="map-lines"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            aria-hidden
+          >
             {map.edges.map((edge) => {
               const from = map.nodes.find((node) => node.id === edge.from);
               const to = map.nodes.find((node) => node.id === edge.to);
@@ -236,9 +262,20 @@ export function MapScreen({ onReroll, onEndRun }: MapScreenProps) {
                 return null;
               }
 
-              const raw = { x1: nodeX(from), y1: nodeY(from), x2: nodeX(to), y2: nodeY(to) };
-              const { x1, y1, x2, y2 } = trimToNodeEdges(raw, stageSize.width, stageSize.height, edgeGapPx);
-              const isPath = currentNodeId === from.id && selectable.includes(to.id);
+              const raw = {
+                x1: nodeX(from),
+                y1: nodeY(from),
+                x2: nodeX(to),
+                y2: nodeY(to),
+              };
+              const { x1, y1, x2, y2 } = trimToNodeEdges(
+                raw,
+                stageSize.width,
+                stageSize.height,
+                edgeGapPx,
+              );
+              const isPath =
+                currentNodeId === from.id && selectable.includes(to.id);
 
               return (
                 <line
@@ -247,7 +284,7 @@ export function MapScreen({ onReroll, onEndRun }: MapScreenProps) {
                   y1={y1}
                   x2={x2}
                   y2={y2}
-                  className={isPath ? 'path-line active' : 'path-line'}
+                  className={isPath ? "path-line active" : "path-line"}
                 />
               );
             })}
@@ -263,28 +300,47 @@ export function MapScreen({ onReroll, onEndRun }: MapScreenProps) {
 
               const className = [
                 NODE_STYLES[node.type],
-                isCurrent ? 'current' : '',
-                isVisited ? 'visited' : '',
-                isSelectable ? 'selectable' : ''
+                isCurrent ? "current" : "",
+                isVisited ? "visited" : "",
+                isSelectable ? "selectable" : "",
               ]
                 .filter(Boolean)
-                .join(' ');
+                .join(" ");
 
               return (
                 <button
                   key={node.id}
                   className={className}
-                  style={{ top, left, width: nodeSize, height: nodeSize, animationDelay: `${index * 28}ms` }}
+                  style={{
+                    top,
+                    left,
+                    width: nodeSize,
+                    height: nodeSize,
+                    animationDelay: `${index * 28}ms`,
+                  }}
                   disabled={!isSelectable}
                   onClick={() => selectNode(node.id)}
                   onMouseEnter={() => setTooltipNodeId(node.id)}
-                  onMouseLeave={() => setTooltipNodeId((current) => (current === node.id ? null : current))}
+                  onMouseLeave={() =>
+                    setTooltipNodeId((current) =>
+                      current === node.id ? null : current,
+                    )
+                  }
                   onFocus={() => setTooltipNodeId(node.id)}
-                  onBlur={() => setTooltipNodeId((current) => (current === node.id ? null : current))}
+                  onBlur={() =>
+                    setTooltipNodeId((current) =>
+                      current === node.id ? null : current,
+                    )
+                  }
                   aria-label={`${resolveNodeLabel(node.type)}: ${describeType(node.type)}`}
-                  aria-describedby={tooltipNodeId === node.id ? 'map-node-tooltip' : undefined}
+                  aria-describedby={
+                    tooltipNodeId === node.id ? "map-node-tooltip" : undefined
+                  }
                 >
-                  <span aria-hidden="true" style={{ fontSize: nodeSize * 0.55 }}>
+                  <span
+                    aria-hidden="true"
+                    style={{ fontSize: nodeSize * 0.55 }}
+                  >
                     {NODE_ICONS[node.type]}
                   </span>
                 </button>
@@ -296,8 +352,11 @@ export function MapScreen({ onReroll, onEndRun }: MapScreenProps) {
             <div
               id="map-node-tooltip"
               role="tooltip"
-              className={`map-node-tooltip ${nodeY(tooltipNode) < 20 ? 'below' : ''}`.trim()}
-              style={{ top: `${nodeY(tooltipNode)}%`, left: `${nodeX(tooltipNode)}%` }}
+              className={`map-node-tooltip ${nodeY(tooltipNode) < 20 ? "below" : ""}`.trim()}
+              style={{
+                top: `${nodeY(tooltipNode)}%`,
+                left: `${nodeX(tooltipNode)}%`,
+              }}
             >
               <strong>{resolveNodeLabel(tooltipNode.type)}</strong>
               <span>{describeType(tooltipNode.type)}</span>
@@ -308,4 +367,3 @@ export function MapScreen({ onReroll, onEndRun }: MapScreenProps) {
     </div>
   );
 }
-

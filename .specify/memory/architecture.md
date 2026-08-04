@@ -11,6 +11,7 @@ and return plain state objects. This boundary is enforced by convention and must
 crossed (importing Zustand or React into engine files is a bug).
 
 `src/app/` is the UI/state layer that wraps the engine:
+
 - `store/` — Zustand stores that own React-visible state and call engine functions
 - `components/` — React components that read stores and render UI
 - `combat/` — UI-layer combat helpers (selectors, auto-word suggestions) that depend on
@@ -36,6 +37,7 @@ User action (React event)
 ```
 
 `RunState` is the canonical run snapshot. It travels through:
+
 1. Engine functions (mutated in place)
 2. combatStore (holds the live reference)
 3. persistence/runSave.ts (serialises to save envelope for localStorage)

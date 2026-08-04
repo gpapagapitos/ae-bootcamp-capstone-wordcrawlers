@@ -1,11 +1,11 @@
-import { create } from 'zustand';
-import { createInitialRunState } from '../../engine/state.js';
-import { createLetterCard, upgradeCard } from '../../engine/cards.js';
-import type { Card, HeroId, RunState } from '../../engine/types.js';
-import { pickEvent } from '../content/events.js';
-import type { EventBuff, EventChoice, EventDef } from '../content/events.js';
+import { create } from "zustand";
+import { createInitialRunState } from "../../engine/state.js";
+import { createLetterCard, upgradeCard } from "../../engine/cards.js";
+import type { Card, HeroId, RunState } from "../../engine/types.js";
+import { pickEvent } from "../content/events.js";
+import type { EventBuff, EventChoice, EventDef } from "../content/events.js";
 
-type ModalType = 'reward' | 'shop' | 'rest' | 'event' | null;
+type ModalType = "reward" | "shop" | "rest" | "event" | null;
 
 const STARTING_HP = 20;
 export const REST_HEAL_AMOUNT = 8;
@@ -43,7 +43,7 @@ interface ProgressionState {
   resetProgression: (heroId?: HeroId, seed?: number) => void;
 }
 
-const LETTER_POOL = 'abcdefghijklmnopqrstuvwxyz'.split('');
+const LETTER_POOL = "abcdefghijklmnopqrstuvwxyz".split("");
 
 /**
  * Per-hero Library pool (spec 009 R13): Shop/reward cards are drawn from the hero's own
@@ -53,8 +53,46 @@ const LETTER_POOL = 'abcdefghijklmnopqrstuvwxyz'.split('');
  * (value 1) or consonants (value 2).
  */
 const LIBRARY_POOLS: Record<HeroId, string[]> = {
-  duelist: ['s', 'w', 'r', 'd', 'c', 't', 'l', 'k', 'b', 'g', 'm', 'p', 'n', 'o', 'a', 'i', 'e', 'u'],
-  arcanist: ['h', 'x', 'g', 'l', 'p', 'y', 'n', 'c', 't', 'k', 'b', 'd', 'm', 'f', 'e', 'i', 'a', 'o']
+  duelist: [
+    "s",
+    "w",
+    "r",
+    "d",
+    "c",
+    "t",
+    "l",
+    "k",
+    "b",
+    "g",
+    "m",
+    "p",
+    "n",
+    "o",
+    "a",
+    "i",
+    "e",
+    "u",
+  ],
+  arcanist: [
+    "h",
+    "x",
+    "g",
+    "l",
+    "p",
+    "y",
+    "n",
+    "c",
+    "t",
+    "k",
+    "b",
+    "d",
+    "m",
+    "f",
+    "e",
+    "i",
+    "a",
+    "o",
+  ],
 };
 
 function libraryPoolFor(heroId: HeroId): string[] {
@@ -62,11 +100,21 @@ function libraryPoolFor(heroId: HeroId): string[] {
 }
 
 function cardValue(letter: string): number {
-  return 'aeiou'.includes(letter) ? 1 : 2;
+  return "aeiou".includes(letter) ? 1 : 2;
 }
 
-function createCard(letter: string, rarity: 1 | 2 | 3, source: string, index: number): Card {
-  return createLetterCard(`${source}-${index}-${letter}-${Date.now()}`, letter, cardValue(letter), rarity);
+function createCard(
+  letter: string,
+  rarity: 1 | 2 | 3,
+  source: string,
+  index: number,
+): Card {
+  return createLetterCard(
+    `${source}-${index}-${letter}-${Date.now()}`,
+    letter,
+    cardValue(letter),
+    rarity,
+  );
 }
 
 function rotateIndex(seed: number, offset: number, size: number): number {
@@ -78,7 +126,7 @@ function buildRewardOptions(seed: number, heroId: HeroId): Card[] {
   return Array.from({ length: 3 }, (_, index) => {
     const letter = pool[rotateIndex(seed, index, pool.length)];
     const rarity = (index === 2 ? 2 : 1) as 1 | 2 | 3;
-    return createCard(letter, rarity, 'reward', index);
+    return createCard(letter, rarity, "reward", index);
   });
 }
 
@@ -87,7 +135,7 @@ function buildShopOffers(seed: number, heroId: HeroId): Card[] {
   return Array.from({ length: 4 }, (_, index) => {
     const letter = pool[rotateIndex(seed + 77, index, pool.length)];
     const rarity = (index > 1 ? 2 : 1) as 1 | 2 | 3;
-    return createCard(letter, rarity, 'shop', index);
+    return createCard(letter, rarity, "shop", index);
   });
 }
 
@@ -96,11 +144,11 @@ function encounterDeckToRunDeck(run: RunState): Card[] {
     ...run.deck.draw,
     ...run.deck.hand,
     ...run.deck.discard,
-    ...run.deck.fatigue
+    ...run.deck.fatigue,
   ];
 }
 
-const CURSE_LETTERS = ['q', 'z', 'x', 'j', 'v', 'w', 'k'];
+const CURSE_LETTERS = ["q", "z", "x", "j", "v", "w", "k"];
 
 /** Event-only curse card: mirrors engine Penalty cards but with a collision-free id. */
 function createCursedCard(index: number): Card {
@@ -111,9 +159,9 @@ function createCursedCard(index: number): Card {
     value: 0,
     rarity: 1,
     tags: [],
-    kind: 'penalty',
+    kind: "penalty",
     left: { hits: 0, blocks: 0, energy: 0 },
-    right: { hits: 0, blocks: 0, energy: 0 }
+    right: { hits: 0, blocks: 0, energy: 0 },
   };
 }
 
@@ -131,7 +179,7 @@ const REMOVE_CARD_PRICE = 5;
 const STARTING_BOON = 12;
 
 export const useProgressionStore = create<ProgressionState>((set, get) => ({
-  heroId: 'duelist',
+  heroId: "duelist",
   boon: STARTING_BOON,
   heroHp: STARTING_HP,
   heroMaxHp: STARTING_HP,
@@ -146,7 +194,7 @@ export const useProgressionStore = create<ProgressionState>((set, get) => ({
   pendingBuff: null,
   initialized: false,
 
-  initializeRunDeck: (heroId = 'duelist', seed = 20260731) => {
+  initializeRunDeck: (heroId = "duelist", seed = 20260731) => {
     if (get().initialized) {
       return;
     }
@@ -161,7 +209,7 @@ export const useProgressionStore = create<ProgressionState>((set, get) => ({
       initialized: true,
       activeModal: null,
       rewardOptions: [],
-      shopOffers: []
+      shopOffers: [],
     });
   },
 
@@ -170,45 +218,50 @@ export const useProgressionStore = create<ProgressionState>((set, get) => ({
       runDeck: encounterDeckToRunDeck(run),
       boon: run.hero.boon,
       heroHp: run.hero.hp,
-      heroMaxHp: run.hero.maxHp
+      heroMaxHp: run.hero.maxHp,
     });
   },
 
   openRewardModal: (seed = Date.now()) => {
     set({
-      activeModal: 'reward',
-      rewardOptions: buildRewardOptions(seed, get().heroId)
+      activeModal: "reward",
+      rewardOptions: buildRewardOptions(seed, get().heroId),
     });
   },
 
   openShopModal: (seed = Date.now()) => {
     set({
-      activeModal: 'shop',
-      shopOffers: buildShopOffers(seed, get().heroId)
+      activeModal: "shop",
+      shopOffers: buildShopOffers(seed, get().heroId),
     });
   },
 
   openRestModal: (seed = Date.now()) => {
     const state = get();
-    const upgradable = state.runDeck.filter((card) => card.kind === 'letter' && !card.tags.includes('upgraded'));
+    const upgradable = state.runDeck.filter(
+      (card) => card.kind === "letter" && !card.tags.includes("upgraded"),
+    );
     const pool = upgradable.length > 0 ? upgradable : state.runDeck;
-    const options = Array.from({ length: Math.min(3, pool.length) }, (_, index) => {
-      const pickIndex = rotateIndex(seed, index, pool.length);
-      return pool[pickIndex];
-    });
+    const options = Array.from(
+      { length: Math.min(3, pool.length) },
+      (_, index) => {
+        const pickIndex = rotateIndex(seed, index, pool.length);
+        return pool[pickIndex];
+      },
+    );
 
     set({
-      activeModal: 'rest',
-      restCardOptions: options
+      activeModal: "rest",
+      restCardOptions: options,
     });
   },
 
   openEventModal: (seed = Date.now()) => {
     set({
-      activeModal: 'event',
+      activeModal: "event",
       eventDef: pickEvent(seed),
       eventResult: null,
-      eventResultEffects: null
+      eventResultEffects: null,
     });
   },
 
@@ -222,7 +275,7 @@ export const useProgressionStore = create<ProgressionState>((set, get) => ({
     set({
       runDeck: [...state.runDeck, card],
       rewardOptions: [],
-      activeModal: null
+      activeModal: null,
     });
   },
 
@@ -238,8 +291,10 @@ export const useProgressionStore = create<ProgressionState>((set, get) => ({
       return;
     }
 
-    const replaceIndex = state.runDeck.findIndex((item) => item.id === replaceCardId);
-    if (replaceIndex === -1 || state.runDeck[replaceIndex].kind === 'penalty') {
+    const replaceIndex = state.runDeck.findIndex(
+      (item) => item.id === replaceCardId,
+    );
+    if (replaceIndex === -1 || state.runDeck[replaceIndex].kind === "penalty") {
       return;
     }
 
@@ -249,7 +304,7 @@ export const useProgressionStore = create<ProgressionState>((set, get) => ({
     set({
       boon: state.boon - price,
       runDeck,
-      shopOffers: state.shopOffers.filter((item) => item.id !== cardId)
+      shopOffers: state.shopOffers.filter((item) => item.id !== cardId),
     });
   },
 
@@ -260,13 +315,13 @@ export const useProgressionStore = create<ProgressionState>((set, get) => ({
     }
 
     const target = state.runDeck.find((card) => card.id === cardId);
-    if (!target || target.kind === 'penalty') {
+    if (!target || target.kind === "penalty") {
       return;
     }
 
     set({
       boon: state.boon - REMOVE_CARD_PRICE,
-      runDeck: state.runDeck.filter((card) => card.id !== cardId)
+      runDeck: state.runDeck.filter((card) => card.id !== cardId),
     });
   },
 
@@ -275,30 +330,35 @@ export const useProgressionStore = create<ProgressionState>((set, get) => ({
     set({
       heroHp: Math.min(state.heroMaxHp, state.heroHp + REST_HEAL_AMOUNT),
       activeModal: null,
-      restCardOptions: []
+      restCardOptions: [],
     });
   },
 
   chooseRestUpgrade: (cardId) => {
     const state = get();
     set({
-      runDeck: state.runDeck.map((card) => (card.id === cardId ? upgradeCard(card) : card)),
+      runDeck: state.runDeck.map((card) =>
+        card.id === cardId ? upgradeCard(card) : card,
+      ),
       activeModal: null,
-      restCardOptions: []
+      restCardOptions: [],
     });
   },
 
   chooseRestCleanse: () => {
     const state = get();
-    const index = state.runDeck.findIndex((card) => card.kind === 'penalty');
+    const index = state.runDeck.findIndex((card) => card.kind === "penalty");
     if (index === -1) {
       return;
     }
 
     set({
-      runDeck: [...state.runDeck.slice(0, index), ...state.runDeck.slice(index + 1)],
+      runDeck: [
+        ...state.runDeck.slice(0, index),
+        ...state.runDeck.slice(index + 1),
+      ],
       activeModal: null,
-      restCardOptions: []
+      restCardOptions: [],
     });
   },
 
@@ -310,30 +370,37 @@ export const useProgressionStore = create<ProgressionState>((set, get) => ({
     }
 
     let runDeck = state.runDeck;
-    if (choice.cardEffect === 'addCard') {
+    if (choice.cardEffect === "addCard") {
       const pool = libraryPoolFor(state.heroId);
       const letter = pool[rotateIndex(Date.now(), runDeck.length, pool.length)];
-      runDeck = [...runDeck, createCard(letter, 1, 'event', runDeck.length)];
-    } else if (choice.cardEffect === 'removeCard' && runDeck.length > 5) {
+      runDeck = [...runDeck, createCard(letter, 1, "event", runDeck.length)];
+    } else if (choice.cardEffect === "removeCard" && runDeck.length > 5) {
       const index = rotateIndex(Date.now(), runDeck.length, runDeck.length);
       runDeck = runDeck.filter((_, i) => i !== index);
-    } else if (choice.cardEffect === 'upgradeCard') {
-      const eligible = runDeck.filter((card) => card.kind === 'letter' && !card.tags.includes('upgraded'));
+    } else if (choice.cardEffect === "upgradeCard") {
+      const eligible = runDeck.filter(
+        (card) => card.kind === "letter" && !card.tags.includes("upgraded"),
+      );
       if (eligible.length > 0) {
         const target = eligible[rotateIndex(Date.now(), 0, eligible.length)];
-        runDeck = runDeck.map((card) => (card.id === target.id ? upgradeCard(card) : card));
+        runDeck = runDeck.map((card) =>
+          card.id === target.id ? upgradeCard(card) : card,
+        );
       }
-    } else if (choice.cardEffect === 'curseCard') {
+    } else if (choice.cardEffect === "curseCard") {
       runDeck = [...runDeck, createCursedCard(runDeck.length)];
     }
 
     set({
-      heroHp: Math.max(0, Math.min(state.heroMaxHp, state.heroHp + (choice.deltaHp ?? 0))),
+      heroHp: Math.max(
+        0,
+        Math.min(state.heroMaxHp, state.heroHp + (choice.deltaHp ?? 0)),
+      ),
       boon: Math.max(0, state.boon + (choice.deltaBoon ?? 0)),
       runDeck,
       pendingBuff: choice.buff ?? state.pendingBuff,
       eventResult: choice.outcomeText,
-      eventResultEffects: choice
+      eventResultEffects: choice,
     });
   },
 
@@ -353,11 +420,11 @@ export const useProgressionStore = create<ProgressionState>((set, get) => ({
       restCardOptions: [],
       eventDef: null,
       eventResult: null,
-      eventResultEffects: null
+      eventResultEffects: null,
     });
   },
 
-  resetProgression: (heroId = 'duelist', seed = Date.now()) => {
+  resetProgression: (heroId = "duelist", seed = Date.now()) => {
     const run = createInitialRunState(seed, heroId);
     set({
       heroId,
@@ -373,9 +440,9 @@ export const useProgressionStore = create<ProgressionState>((set, get) => ({
       eventResult: null,
       eventResultEffects: null,
       pendingBuff: null,
-      initialized: true
+      initialized: true,
     });
-  }
+  },
 }));
 
 export function getCardDisplayName(card: Card): string {

@@ -69,17 +69,20 @@ Priority order per docs/board.json backlog:
 3. WC-011 / WC-012: Meta progression profile, unlocks, and UI (specs/006-meta-progression-and-unlocks)
 4. WC-013 / WC-014: Deterministic integration tests and CI quality gates
 
-2. Word entry UX
+5. Word entry UX
+
 - compose word from hand
 - submit and pass actions
 - invalid-word feedback messaging
 
 3. Progression mechanics
+
 - encounter resolution hooks (win/lose)
 - reward selection flow
 - shop flow
 
 4. Test expansion
+
 - integration test for one full encounter loop
 - one e2e smoke path for map -> encounter -> result
 

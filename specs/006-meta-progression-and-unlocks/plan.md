@@ -10,18 +10,23 @@
 ## Modules
 
 1. src/app/meta/profileStore.ts
+
 - Persistent meta profile state, reset behavior, and migration version.
 
 2. src/data/unlocks.ts
+
 - Unlock catalog entries (cosmetic and gameplay).
 
 3. src/engine/meta-economy.ts
+
 - Currency award calculation and deterministic test-mode behavior.
 
 4. src/app/components/MetaScreen.tsx
+
 - Unlock presentation, costs, prerequisites, and purchase actions.
 
 5. src/app/store/mapStore.ts
+
 - Run-end hook to apply and persist meta rewards.
 
 ## Data Contracts

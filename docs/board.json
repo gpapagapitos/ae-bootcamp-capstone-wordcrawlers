@@ -28,13 +28,8 @@
       "status": "done",
       "priority": "P1",
       "owner": "",
-      "tags": [
-        "ui",
-        "combat"
-      ],
-      "specRefs": [
-        "specs/001-core-run/tasks.md"
-      ],
+      "tags": ["ui", "combat"],
+      "specRefs": ["specs/001-core-run/tasks.md"],
       "notes": "Completed: combat HUD with engine-wired hand tray, intent preview stack, and last-turn action log.",
       "updatedAt": "2026-07-31T17:15:33.139Z"
     },
@@ -44,13 +39,8 @@
       "status": "done",
       "priority": "P1",
       "owner": "",
-      "tags": [
-        "ui",
-        "word-system"
-      ],
-      "specRefs": [
-        "specs/001-core-run/tasks.md"
-      ],
+      "tags": ["ui", "word-system"],
+      "specRefs": ["specs/001-core-run/tasks.md"],
       "notes": "Completed: manual word entry UX with compose rail, selectable hand letters, undo/clear, submit, pass, and strict-dictionary feedback.",
       "updatedAt": "2026-07-31T17:15:36.783Z"
     },
@@ -60,13 +50,8 @@
       "status": "done",
       "priority": "P2",
       "owner": "",
-      "tags": [
-        "ui",
-        "progression"
-      ],
-      "specRefs": [
-        "specs/001-core-run/tasks.md"
-      ],
+      "tags": ["ui", "progression"],
+      "specRefs": ["specs/001-core-run/tasks.md"],
       "notes": "Implemented reward and shop modal flows with progression store, reward pick (3 options), shop buy/remove deck mutations, and map/combat wiring for post-victory rewards.",
       "updatedAt": "2026-07-31T17:17:52.645Z"
     },
@@ -76,10 +61,7 @@
       "status": "done",
       "priority": "P2",
       "owner": "",
-      "tags": [
-        "workflow",
-        "docs"
-      ],
+      "tags": ["workflow", "docs"],
       "specRefs": [
         "docs/handoff.md",
         "scripts/board.mjs",
@@ -94,10 +76,7 @@
       "status": "done",
       "priority": "P1",
       "owner": "",
-      "tags": [
-        "engine",
-        "persistence"
-      ],
+      "tags": ["engine", "persistence"],
       "specRefs": [
         "specs/005-save-resume-recovery/spec.md",
         "specs/005-save-resume-recovery/tasks.md"
@@ -111,10 +90,7 @@
       "status": "done",
       "priority": "P1",
       "owner": "",
-      "tags": [
-        "ui",
-        "persistence"
-      ],
+      "tags": ["ui", "persistence"],
       "specRefs": [
         "specs/005-save-resume-recovery/spec.md",
         "specs/005-save-resume-recovery/tasks.md"
@@ -128,13 +104,8 @@
       "status": "done",
       "priority": "P1",
       "owner": "",
-      "tags": [
-        "progression",
-        "ui"
-      ],
-      "specRefs": [
-        "specs/001-core-run/tasks.md"
-      ],
+      "tags": ["progression", "ui"],
+      "specRefs": ["specs/001-core-run/tasks.md"],
       "notes": "Completed: encounter outcome checks, reward/shop progression wiring, explicit run-end victory/defeat overlay, and new-run reset path across map/combat/progression stores.",
       "updatedAt": "2026-07-31T12:25:00.000Z"
     },
@@ -144,10 +115,7 @@
       "status": "backlog",
       "priority": "P1",
       "owner": "",
-      "tags": [
-        "map",
-        "determinism"
-      ],
+      "tags": ["map", "determinism"],
       "specRefs": [
         "specs/007-map-generation-contract/spec.md",
         "specs/007-map-generation-contract/tasks.md"
@@ -161,10 +129,7 @@
       "status": "backlog",
       "priority": "P1",
       "owner": "",
-      "tags": [
-        "hero",
-        "content"
-      ],
+      "tags": ["hero", "content"],
       "specRefs": [
         "specs/008-hero-kit-identity-contract/spec.md",
         "specs/008-hero-kit-identity-contract/tasks.md"
@@ -178,10 +143,7 @@
       "status": "backlog",
       "priority": "P1",
       "owner": "",
-      "tags": [
-        "hero",
-        "combat"
-      ],
+      "tags": ["hero", "combat"],
       "specRefs": [
         "specs/008-hero-kit-identity-contract/spec.md",
         "specs/008-hero-kit-identity-contract/tasks.md"
@@ -195,10 +157,7 @@
       "status": "backlog",
       "priority": "P2",
       "owner": "",
-      "tags": [
-        "meta",
-        "progression"
-      ],
+      "tags": ["meta", "progression"],
       "specRefs": [
         "specs/006-meta-progression-and-unlocks/spec.md",
         "specs/006-meta-progression-and-unlocks/tasks.md"
@@ -212,10 +171,7 @@
       "status": "backlog",
       "priority": "P2",
       "owner": "",
-      "tags": [
-        "meta",
-        "ui"
-      ],
+      "tags": ["meta", "ui"],
       "specRefs": [
         "specs/006-meta-progression-and-unlocks/spec.md",
         "specs/006-meta-progression-and-unlocks/tasks.md"
@@ -229,10 +185,7 @@
       "status": "backlog",
       "priority": "P1",
       "owner": "",
-      "tags": [
-        "testing",
-        "determinism"
-      ],
+      "tags": ["testing", "determinism"],
       "specRefs": [
         "specs/001-core-run/tasks.md",
         "specs/005-save-resume-recovery/tasks.md",
@@ -248,10 +201,7 @@
       "status": "backlog",
       "priority": "P1",
       "owner": "",
-      "tags": [
-        "ci",
-        "docs"
-      ],
+      "tags": ["ci", "docs"],
       "specRefs": [
         "docs/capstone-traceability.md",
         "specs/001-core-run/tasks.md"
@@ -265,15 +215,8 @@
       "status": "done",
       "priority": "P1",
       "owner": "",
-      "tags": [
-        "ui",
-        "combat",
-        "map",
-        "theme"
-      ],
-      "specRefs": [
-        "docs/ui-ux-direction.md"
-      ],
+      "tags": ["ui", "combat", "map", "theme"],
+      "specRefs": ["docs/ui-ux-direction.md"],
       "notes": "Replaced dark dungeon gradient theme with flat parchment/ink palette; fixed dead-CSS layout bug causing duplicate combat panel and hidden Cast/Pass buttons; rebuilt map as Slay-the-Spire-style connected circular icon nodes; added HeroSelectScreen gating boot and post-run flow; reworked arena to hero-left/enemy-right layout with name banners, inline intent chip, turn-phase stepper, fanned hand with tabletop-style Wild/Enemy Vowel cards, big-hit damage juice, and legible victory/defeat overlay; removed redundant action log and map footer panel.",
       "updatedAt": "2026-08-03T15:27:56.175Z"
     },
@@ -283,10 +226,7 @@
       "status": "done",
       "priority": "P2",
       "owner": "",
-      "tags": [
-        "ux",
-        "onboarding"
-      ],
+      "tags": ["ux", "onboarding"],
       "specRefs": [
         "specs/009-board-game-rules-fidelity/spec.md",
         "specs/010-tutorial-mode/spec.md"

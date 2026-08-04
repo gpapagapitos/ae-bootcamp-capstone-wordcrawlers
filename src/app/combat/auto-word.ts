@@ -1,5 +1,5 @@
-import { AUTO_WORD_SUGGESTIONS } from '../../data/words.js';
-import type { Card } from '../../engine/types.js';
+import { AUTO_WORD_SUGGESTIONS } from "../../data/words.js";
+import type { Card } from "../../engine/types.js";
 
 interface WordCandidate {
   word: string;
@@ -59,7 +59,7 @@ export function findBestPlayableWord(cards: Card[]): string | null {
 
     candidates.push({
       word,
-      score: scoreWord(word, cards)
+      score: scoreWord(word, cards),
     });
   }
 

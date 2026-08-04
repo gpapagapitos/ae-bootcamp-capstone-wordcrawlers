@@ -1,4 +1,4 @@
-import type { EnemyIntent, RunState } from '../../engine/types.js';
+import type { EnemyIntent, RunState } from "../../engine/types.js";
 
 export interface IntentPreviewItem {
   offset: number;
@@ -6,14 +6,16 @@ export interface IntentPreviewItem {
 }
 
 export function getActionLogDisplayTurn(run: RunState): number {
-  if (run.phase === 'prep' && run.turn > 1) {
+  if (run.phase === "prep" && run.turn > 1) {
     return run.turn - 1;
   }
 
   return run.turn;
 }
 
-export function getActionLogEntries(run: RunState): { turn: number; message: string }[] {
+export function getActionLogEntries(
+  run: RunState,
+): { turn: number; message: string }[] {
   const displayTurn = getActionLogDisplayTurn(run);
   const filtered = run.actionLog.filter((entry) => entry.turn === displayTurn);
 
@@ -24,7 +26,10 @@ export function getActionLogEntries(run: RunState): { turn: number; message: str
   return run.actionLog.slice(-8);
 }
 
-export function getIntentPreview(run: RunState, count = 3): IntentPreviewItem[] {
+export function getIntentPreview(
+  run: RunState,
+  count = 3,
+): IntentPreviewItem[] {
   const intents = run.enemy.intents;
   if (intents.length === 0) {
     return [];
@@ -36,7 +41,7 @@ export function getIntentPreview(run: RunState, count = 3): IntentPreviewItem[] 
   for (let offset = 0; offset < count; offset += 1) {
     preview.push({
       offset,
-      intent: intents[(start + offset) % intents.length]
+      intent: intents[(start + offset) % intents.length],
     });
   }
 

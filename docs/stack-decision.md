@@ -15,15 +15,19 @@ Do not use Godot or Three.js for MVP.
 ## Why this is the best fit
 
 1. The game is system-heavy, not camera-heavy.
+
 - Word composition, card interactions, intent clarity, and map choices matter more than 3D world traversal.
 
 2. We already invested in TypeScript engine tests.
+
 - Keeping frontend in TypeScript preserves one language and fast iteration.
 
 3. Slay the Spire-style map is a graph UI problem.
+
 - It is best implemented as 2D nodes and edges with strong UX clarity, not 3D scene tooling.
 
 4. PixiJS gives enough visual punch.
+
 - Smooth animations, shader-capable effects, and strong performance for cards, particles, and transitions.
 
 ## Why not Three.js for MVP

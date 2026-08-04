@@ -27,27 +27,27 @@ npm run dev        # http://localhost:5173
 
 ## Stack
 
-| Layer | Technology |
-|---|---|
-| Engine | TypeScript (pure, no DOM) |
-| Frontend | React 19 + Vite |
-| State | Zustand |
-| Effects | PixiJS |
-| Tests | Vitest — 74 tests across 11 suites |
-| CI | GitHub Actions (board check → lint → typecheck → test) |
+| Layer    | Technology                                             |
+| -------- | ------------------------------------------------------ |
+| Engine   | TypeScript (pure, no DOM)                              |
+| Frontend | React 19 + Vite                                        |
+| State    | Zustand                                                |
+| Effects  | PixiJS                                                 |
+| Tests    | Vitest — 74 tests across 11 suites                     |
+| CI       | GitHub Actions (board check → lint → typecheck → test) |
 
 ## How It Was Built
 
 This project followed the full bootcamp session stack end-to-end:
 
-| Session | Practice | Evidence in this repo |
-|---|---|---|
-| 1 | Agentic multi-file delivery | Engine, specs, and UI scaffolded in coordinated agent sessions |
-| 2 | Context-first development | `.github/copilot-instructions.md`, `.specify/memory/` read by Copilot before every session |
-| 3 | Discovery and design rigor | PRD, 10 feature specs with acceptance criteria, clarifications, and plans |
-| 5 | Agentic TDD loops | Engine-first implementation; tests written alongside each module |
-| 6 | Spec-driven development | Constitution → decisions → specs → plans → tasks → implementation |
-| 7 | CI/CD and platform posture | GitHub Actions pipeline; board integrity enforced in CI |
+| Session | Practice                    | Evidence in this repo                                                                      |
+| ------- | --------------------------- | ------------------------------------------------------------------------------------------ |
+| 1       | Agentic multi-file delivery | Engine, specs, and UI scaffolded in coordinated agent sessions                             |
+| 2       | Context-first development   | `.github/copilot-instructions.md`, `.specify/memory/` read by Copilot before every session |
+| 3       | Discovery and design rigor  | PRD, 10 feature specs with acceptance criteria, clarifications, and plans                  |
+| 5       | Agentic TDD loops           | Engine-first implementation; tests written alongside each module                           |
+| 6       | Spec-driven development     | Constitution → decisions → specs → plans → tasks → implementation                          |
+| 7       | CI/CD and platform posture  | GitHub Actions pipeline; board integrity enforced in CI                                    |
 
 ## Project Structure
 

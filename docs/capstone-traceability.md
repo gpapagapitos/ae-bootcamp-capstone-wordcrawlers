@@ -7,30 +7,37 @@ Show explicit coverage of AI bootcamp outcomes through the Wordcrawlers capstone
 ## Session Coverage
 
 1. Session 1 (Agentic multi-file delivery)
+
 - Evidence: multi-doc spec generation and coordinated updates across requirements, clarifications, and scope lock.
 - Repo artifacts: specs and docs folders.
 
 2. Session 2 (Context-first development)
+
 - Evidence: PRD, rules adaptation notes, UI/UX direction, and constitution created before implementation.
 - Repo artifacts: docs/prd.md, docs/rules-adaptation.md, docs/ui-ux-direction.md.
 
 3. Session 3 (Discovery/design rigor)
+
 - Evidence: feature specs with acceptance criteria, clarified decisions, and progression design.
 - Repo artifacts: specs/001-core-run, specs/002-content-and-bosses.
 
 4. Session 4 (Python/alternative backend patterns)
+
 - Planned evidence: optional simulation/balancing service and test harness design in later specs.
 - Repo artifacts: specs/006-meta-progression-and-unlocks, specs/008-hero-kit-identity-contract.
 
 5. Session 5 (Agentic test/fix loops)
+
 - Planned evidence: RED-GREEN-REFACTOR loops for engine transitions and combat edge cases.
 - Repo artifacts: specs/005-save-resume-recovery, specs/007-map-generation-contract, future tests and CI logs.
 
 6. Session 6 (Spec-driven development)
+
 - Evidence: constitution + specs + clarifications + plan + tasks + scope lock.
 - Repo artifacts: .specify/memory/constitution.md and specs/*.
 
 7. Session 7 (CI/CD and platform posture)
+
 - Planned evidence: lint/test/build pipeline, optional deployment workflow, and evidence-based PR docs.
 - Repo artifacts: future .github/workflows and release notes.
 
@@ -44,10 +51,20 @@ Show explicit coverage of AI bootcamp outcomes through the Wordcrawlers capstone
   literal Paperback Adventures rulebook (splay, hex/boon economy, top-card fatigue,
   enemy stage flip, Character Development loop). Supersedes conflicting decisions in
   specs 001 and 003 (repeat-word penalty removed).
+- Spec 010: first-run tutorial mode contract plus clarifications (no plan/tasks split —
+  small enough to scope directly in spec + clarifications).
+- Spec 011: Boss Relic reward flow + new Consumable item tier, closing spec 009's
+  R9 "Boss Relics + Relic acquisition flow" known gap. Full spec + clarifications + plan
+  - tasks, with explicit user sign-off gating implementation (Phase A of tasks.md) —
+    used in the capstone demo as the walkthrough example of the end-to-end spec-driven
+    process: constitution/bible/canon-checklist review -> spec.md requirements ->
+    clarifications.md (proposed decisions flagged for sign-off) -> plan.md (module-level
+    technical design) -> tasks.md (phased, sign-off-gated implementation checklist).
 
 ## Requirement-to-Evidence Method
 
 For each implemented feature:
+
 - link spec requirement ID,
 - link code module,
 - link test case,

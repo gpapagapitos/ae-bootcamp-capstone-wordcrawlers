@@ -28,33 +28,40 @@ These official FAQ/errata signals are carried forward:
 ## Digital Adaptation Decisions
 
 1. Encounter format
+
 - Run = Act 1, Act 2, Act 3 + final boss.
 - Each act has: 3 normal fights, 1 elite, 1 rest/shop branch, then boss.
 
 2. Turn structure
+
 - Prep: draw hand, trigger start-of-turn effects.
 - Spell: create one word from hand (or pass).
 - Clash: resolve damage, block, on-hit, and status effects in strict order.
 - Cleanup: fatigue rule, discard, enemy intent advance.
 
 3. Word legality
+
 - Base dictionary with profanity filter and minimum length 2.
 - Optional accessibility mode: allow near-words with score penalty.
 
 4. Fatigue model
+
 - One card from used word becomes fatigued each turn based on card tags.
 - Fatigued cards are unavailable until encounter end unless an effect revives them.
 
 5. Resource model
+
 - HP, Block, Energy, Hex, Boons.
 - Hex is applied to enemy; some items consume enemy hex to trigger effects.
 
 6. Deckbuilding loop
+
 - Rewards after fights: choose one of three letter cards or utility cards.
 - Optional replace/trash constraints to maintain deck pressure.
 - Shops offer card buys, removals, and relic-like items.
 
 7. Character fantasy
+
 - Three launch heroes with asymmetry:
   - Duelist (aggressive, chain words)
   - Arcanist (hex/control)

@@ -2,7 +2,45 @@
 
 Running log of decisions recorded during spec and implementation sessions. New entries go
 at the top. Each entry notes what was decided, what was rejected, and which spec captures
-the requirement — so that future sessions can trace *why* the code is the way it is.
+the requirement — so that future sessions can trace _why_ the code is the way it is.
+
+---
+
+## Session: Spec 011 scoping — Boss Relics + Consumables
+
+**Feature scope: Boss Relic reward flow + new Consumable item tier.**
+Chosen over the other candidates discussed (Ascension/difficulty modifiers, Act 2
+content) as the first post-MVP feature to run through the full spec-driven flow, because
+it closes an existing, already-documented gap (spec 009 R9 Known Gaps: Relics are only
+granted at run start, no acquisition flow, no Boss Relics) rather than opening new scope.
+
+Process followed for the demo: read constitution -> decisions -> architecture ->
+docs/bible.md -> docs/content-canon-checklist.md, cross-checked spec 009 for the exact
+gap being closed, then produced spec.md (requirements + acceptance criteria) ->
+clarifications.md (balance-affecting defaults proposed but explicitly marked
+"needs user sign-off", per constitution principle 1 and the repo's balance-change
+convention) -> plan.md (module-level design reusing existing engine/app boundary,
+no new architecture) -> tasks.md (phased checklist with Phase A as an explicit sign-off
+gate before any code is written).
+
+Rejected for this pass: implementing directly without the sign-off gate (rejected —
+violates the repo's standing "balance-affecting changes need explicit user sign-off"
+convention, same as the HP-rescale and energy-cap passes recorded in
+`/memories/repo/rules-fidelity.md`).
+
+---
+
+## Session: Spec 011 sign-off — Phase A cleared
+
+**All 4 balance-affecting defaults in spec 011's clarifications.md approved as proposed.**
+Non-boss Relic reward roll (30%), Consumable inventory cap (3), Consumable magnitude
+(1.5-2x a single Item activation), and Shop Consumable pricing (4-7 boons, common/
+uncommon tier) are now locked decisions, not proposals. The draft Boss Relic/Standard
+Relic/Consumable content list also passed a full `docs/content-canon-checklist.md` gate
+pass (theme/mechanical-role/readability/taxonomy/consistency/playtest-hypothesis),
+recorded in `specs/011-relics-and-consumables/clarifications.md`. Phase A of
+`specs/011-relics-and-consumables/tasks.md` is complete; Phase B (engine contracts) is
+unblocked.
 
 ---
 
@@ -17,6 +55,7 @@ Rejected: Full simulation (too much scope drift from roguelite framing). Pure ad
 (would lose the distinctive Paperback feel that motivated the project).
 
 Immediate spec implications recorded in spec 009:
+
 - Splay direction (left/right) required for every word — top card determines ability and fatigue target.
 - Top-card-only fatigue replaces the earlier "fatigue lowest-rarity card" rule from spec 001.
 - Hex + Boon dual resource replaces single-resource model.
@@ -42,6 +81,7 @@ One act + boss, two heroes (Duelist + Arcanist), strict dictionary, snappy tacti
 dark pulp visual language. See spec 003 for full exit criteria and change control process.
 
 Considered alternatives:
+
 - Two acts: ruled out — content authoring effort before core loop is validated.
 - Three heroes: ruled out — same reason.
 - Fuzzy dictionary: ruled out for default mode; may return as accessibility opt-in post-MVP.

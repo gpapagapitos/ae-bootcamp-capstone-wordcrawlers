@@ -1,13 +1,13 @@
-import type { LocalStorageLike } from './contracts.js';
+import type { LocalStorageLike } from "./contracts.js";
 
-export const TUTORIAL_SEEN_KEY = 'wordcrawlers.tutorial.seen.v1';
+export const TUTORIAL_SEEN_KEY = "wordcrawlers.tutorial.seen.v1";
 
 function resolveStorage(storage?: LocalStorageLike): LocalStorageLike | null {
   if (storage) {
     return storage;
   }
 
-  if (typeof globalThis === 'undefined' || !('localStorage' in globalThis)) {
+  if (typeof globalThis === "undefined" || !("localStorage" in globalThis)) {
     return null;
   }
 
@@ -22,7 +22,7 @@ export function isTutorialSeen(storage?: LocalStorageLike): boolean {
   }
 
   try {
-    return targetStorage.getItem(TUTORIAL_SEEN_KEY) === 'true';
+    return targetStorage.getItem(TUTORIAL_SEEN_KEY) === "true";
   } catch {
     return false;
   }
@@ -35,7 +35,7 @@ export function markTutorialSeen(storage?: LocalStorageLike): void {
   }
 
   try {
-    targetStorage.setItem(TUTORIAL_SEEN_KEY, 'true');
+    targetStorage.setItem(TUTORIAL_SEEN_KEY, "true");
   } catch {
     // Non-fatal: persistence failure should not affect the current tutorial run.
   }

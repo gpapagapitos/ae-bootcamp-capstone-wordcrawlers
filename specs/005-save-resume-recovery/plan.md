@@ -10,18 +10,23 @@
 ## Modules
 
 1. src/app/persistence/runSave.ts
+
 - Save/load/clear API, rotating backup handling, checksum and version checks.
 
 2. src/app/persistence/contracts.ts
+
 - Save payload types and schema version constants.
 
 3. src/app/persistence/validate.ts
+
 - Required field guards and integrity verification.
 
 4. src/app/store/combatStore.ts
+
 - Autosave trigger hooks after state transitions.
 
 5. src/App.tsx
+
 - Resume/abandon flow at startup and corrupted-save messaging path.
 
 ## Data Contracts

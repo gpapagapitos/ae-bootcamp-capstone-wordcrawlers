@@ -1,29 +1,31 @@
-import { useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
+import { useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import {
   advanceTutorialStep,
   createTutorialState,
   currentTutorialStep,
   isLastTutorialStep,
-  type TutorialControllerState
-} from './tutorialController.js';
-import type { TutorialContext } from './tutorialSteps.js';
+  type TutorialControllerState,
+} from "./tutorialController.js";
+import type { TutorialContext } from "./tutorialSteps.js";
 
 interface TutorialOverlayProps {
   context: TutorialContext;
   onComplete: () => void;
 }
 
-const HIGHLIGHT_CLASS = 'tutorial-highlight';
+const HIGHLIGHT_CLASS = "tutorial-highlight";
 const CARD_MARGIN = 16;
 
 const DEFAULT_CARD_STYLE: CSSProperties = {
-  left: '50%',
+  left: "50%",
   bottom: CARD_MARGIN,
-  transform: 'translateX(-50%)'
+  transform: "translateX(-50%)",
 };
 
 export function TutorialOverlay({ context, onComplete }: TutorialOverlayProps) {
-  const [state, setState] = useState<TutorialControllerState>(() => createTutorialState(context));
+  const [state, setState] = useState<TutorialControllerState>(() =>
+    createTutorialState(context),
+  );
   const step = currentTutorialStep(state);
   const cardRef = useRef<HTMLDivElement>(null);
   const [cardStyle, setCardStyle] = useState<CSSProperties>(DEFAULT_CARD_STYLE);
@@ -50,21 +52,27 @@ export function TutorialOverlay({ context, onComplete }: TutorialOverlayProps) {
       if (top + cardRect.height > viewportH - CARD_MARGIN) {
         top = targetRect.top - cardRect.height - CARD_MARGIN;
       }
-      top = Math.max(CARD_MARGIN, Math.min(top, viewportH - cardRect.height - CARD_MARGIN));
+      top = Math.max(
+        CARD_MARGIN,
+        Math.min(top, viewportH - cardRect.height - CARD_MARGIN),
+      );
 
       let left = targetRect.left + targetRect.width / 2 - cardRect.width / 2;
-      left = Math.max(CARD_MARGIN, Math.min(left, viewportW - cardRect.width - CARD_MARGIN));
+      left = Math.max(
+        CARD_MARGIN,
+        Math.min(left, viewportW - cardRect.width - CARD_MARGIN),
+      );
 
-      setCardStyle({ top, left, bottom: 'auto', transform: 'none' });
+      setCardStyle({ top, left, bottom: "auto", transform: "none" });
     };
 
     reposition();
-    window.addEventListener('resize', reposition);
-    window.addEventListener('scroll', reposition, true);
+    window.addEventListener("resize", reposition);
+    window.addEventListener("scroll", reposition, true);
     return () => {
       target?.classList.remove(HIGHLIGHT_CLASS);
-      window.removeEventListener('resize', reposition);
-      window.removeEventListener('scroll', reposition, true);
+      window.removeEventListener("resize", reposition);
+      window.removeEventListener("scroll", reposition, true);
     };
   }, [step]);
 
@@ -82,7 +90,12 @@ export function TutorialOverlay({ context, onComplete }: TutorialOverlayProps) {
   };
 
   return (
-    <div className="tutorial-overlay" role="dialog" aria-labelledby="tutorial-title" aria-live="polite">
+    <div
+      className="tutorial-overlay"
+      role="dialog"
+      aria-labelledby="tutorial-title"
+      aria-live="polite"
+    >
       <div className="tutorial-card panel" ref={cardRef} style={cardStyle}>
         <p className="eyebrow">
           Tutorial &middot; Step {state.stepIndex + 1} of {state.steps.length}
@@ -93,8 +106,13 @@ export function TutorialOverlay({ context, onComplete }: TutorialOverlayProps) {
           <button type="button" className="ink-button" onClick={onComplete}>
             Skip Tutorial
           </button>
-          <button type="button" className="ink-button ink-button-primary" onClick={handleNext} autoFocus>
-            {isLastTutorialStep(state) ? 'Done' : 'Next'}
+          <button
+            type="button"
+            className="ink-button ink-button-primary"
+            onClick={handleNext}
+            autoFocus
+          >
+            {isLastTutorialStep(state) ? "Done" : "Next"}
           </button>
         </div>
       </div>

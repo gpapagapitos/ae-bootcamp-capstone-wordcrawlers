@@ -20,6 +20,7 @@ Execute remaining MVP work in dependency-safe order while preserving determinist
 5. Save/load/abandon behavior with validation and fallback.
 
 Exit criteria:
+
 - Player can complete one full act+boss run with save/resume support.
 - Reward and shop choices mutate deck correctly.
 
@@ -32,6 +33,7 @@ Exit criteria:
 5. Lookahead metadata and map trace fields.
 
 Exit criteria:
+
 - Same seed + state path reproduces map and combat outcomes.
 - Map generation guarantees fairness constraints in tests.
 
@@ -43,6 +45,7 @@ Exit criteria:
 4. Hero-aware reward weighting with neutral pool guarantee.
 
 Exit criteria:
+
 - Both heroes run end-to-end under one-act MVP.
 - Hero mechanics are action-log readable and deterministic.
 
@@ -55,6 +58,7 @@ Exit criteria:
 5. Gameplay unlock integration into content pools.
 
 Exit criteria:
+
 - Currency and unlock states persist across restart.
 - Cosmetic and gameplay unlock paths are both functional.
 
@@ -68,6 +72,7 @@ Exit criteria:
 6. CI wiring for lint/test/build + requirement linkage docs.
 
 Exit criteria:
+
 - CI passes lint/test/build on mainline.
 - Requirement -> code -> test links documented for capstone review.
 

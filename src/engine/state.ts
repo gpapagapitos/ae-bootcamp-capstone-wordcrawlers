@@ -1,6 +1,18 @@
-import { createCoreItems, createHeroRelics, createLetterCard, createPenaltyPool, createWildCard } from './cards.js';
-import { createRng, shuffleInPlace } from './rng.js';
-import type { Card, EnemyState, HeroId, ItemInstance, RunState } from './types.js';
+import {
+  createCoreItems,
+  createHeroRelics,
+  createLetterCard,
+  createPenaltyPool,
+  createWildCard,
+} from "./cards.js";
+import { createRng, shuffleInPlace } from "./rng.js";
+import type {
+  Card,
+  EnemyState,
+  HeroId,
+  ItemInstance,
+  RunState,
+} from "./types.js";
 
 const BASE_HAND_SIZE = 7;
 
@@ -10,19 +22,25 @@ const BASE_HAND_SIZE = 7;
 export const MAX_ENERGY = 6;
 
 function buildStarterDeck(heroId: HeroId): Card[] {
-  const coreLetters = heroId === 'duelist'
-    ? ['s', 'w', 'o', 'r', 'd', 'a', 'r', 'c', 'i', 'n']
-    : ['h', 'e', 'x', 'g', 'l', 'y', 'p', 'h', 'i', 'n'];
+  const coreLetters =
+    heroId === "duelist"
+      ? ["s", "w", "o", "r", "d", "a", "r", "c", "i", "n"]
+      : ["h", "e", "x", "g", "l", "y", "p", "h", "i", "n"];
 
   return coreLetters.map((letter, index) =>
-    createLetterCard(`${heroId}-${index}-${letter}`, letter, 'aeiou'.includes(letter) ? 1 : 2, 1)
+    createLetterCard(
+      `${heroId}-${index}-${letter}`,
+      letter,
+      "aeiou".includes(letter) ? 1 : 2,
+      1,
+    ),
   );
 }
 
 function initialEnemy(): EnemyState {
   return {
-    id: 'act1-boss-proxy',
-    name: 'The Ink Warden',
+    id: "act1-boss-proxy",
+    name: "The Ink Warden",
     stage: 1,
     hp: 28,
     maxHp: 28,
@@ -32,21 +50,21 @@ function initialEnemy(): EnemyState {
     stunned: false,
     intentIndex: 0,
     intents: [
-      { type: 'attack', value: 3 },
-      { type: 'block', value: 2 },
-      { type: 'hex', value: 1 },
-      { type: 'charge', value: 5 }
+      { type: "attack", value: 3 },
+      { type: "block", value: 2 },
+      { type: "hex", value: 1 },
+      { type: "charge", value: 5 },
     ],
     stage2: {
       hp: 18,
       intents: [
-        { type: 'attack', value: 5 },
-        { type: 'hex', value: 1 },
-        { type: 'attack', value: 2 },
-        { type: 'block', value: 3 }
-      ]
+        { type: "attack", value: 5 },
+        { type: "hex", value: 1 },
+        { type: "attack", value: 2 },
+        { type: "block", value: 3 },
+      ],
     },
-    weakVowel: 'i'
+    weakVowel: "i",
   };
 }
 
@@ -58,7 +76,10 @@ export function addPenaltyCardToDeck(state: RunState): void {
   }
 
   state.deck.discard.push(card);
-  state.actionLog.push({ turn: state.turn, message: `A Penalty card (${card.letter.toUpperCase()}) is added to your deck.` });
+  state.actionLog.push({
+    turn: state.turn,
+    message: `A Penalty card (${card.letter.toUpperCase()}) is added to your deck.`,
+  });
 }
 
 /** Returns a played Penalty card to the bottom of the shared pool (spec 009 R6). */
@@ -85,7 +106,11 @@ export function drawCards(state: RunState, amount: number): void {
   }
 }
 
-export function createInitialRunState(seed: number, heroId: HeroId, boon = 0): RunState {
+export function createInitialRunState(
+  seed: number,
+  heroId: HeroId,
+  boon = 0,
+): RunState {
   const rng = createRng(seed);
   const deck = buildStarterDeck(heroId);
   shuffleInPlace(deck, rng);
@@ -93,13 +118,13 @@ export function createInitialRunState(seed: number, heroId: HeroId, boon = 0): R
   const items: ItemInstance[] = createCoreItems(heroId).map((def) => ({
     def,
     usedThisTurn: false,
-    spent: false
+    spent: false,
   }));
 
   const relics: ItemInstance[] = createHeroRelics(heroId).map((def) => ({
     def,
     usedThisTurn: false,
-    spent: false
+    spent: false,
   }));
 
   const state: RunState = {
@@ -111,16 +136,16 @@ export function createInitialRunState(seed: number, heroId: HeroId, boon = 0): R
       block: 0,
       energy: 3,
       hex: 0,
-      boon
+      boon,
     },
     enemy: initialEnemy(),
     deck: {
       draw: deck,
       hand: [],
       discard: [],
-      fatigue: []
+      fatigue: [],
     },
-    phase: 'prep',
+    phase: "prep",
     turn: 1,
     pendingWord: null,
     pendingWordCards: [],
@@ -131,12 +156,15 @@ export function createInitialRunState(seed: number, heroId: HeroId, boon = 0): R
     enemyVowelAvailable: true,
     items,
     actionLog: [],
-    dictionaryMode: 'strict'
+    dictionaryMode: "strict",
   };
 
   drawCards(state, BASE_HAND_SIZE);
 
-  state.actionLog.push({ turn: state.turn, message: 'Run started. Draw 7 cards.' });
+  state.actionLog.push({
+    turn: state.turn,
+    message: "Run started. Draw 7 cards.",
+  });
 
   return state;
 }

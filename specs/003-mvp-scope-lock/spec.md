@@ -1,29 +1,37 @@
 # Spec 003: MVP Scope Lock
 
 ## Status
+
 Approved — all decisions locked; see .specify/memory/decisions.md for full record
 
 ## Purpose
+
 Freeze MVP boundaries so implementation can begin without design drift.
 
 ## Locked Decisions
 
 1. Dictionary mode
+
 - Strict dictionary only for MVP.
 
 2. Run structure
+
 - One act plus one boss.
 
 3. Heroes
+
 - Two heroes in MVP.
 
 4. Repeated words
+
 - Allowed with **no penalty**, matching the source board game rules (see spec 009).
 
 5. Combat pacing
+
 - Snappy tactical: fast resolution with meaningful sequencing.
 
 6. Art direction
+
 - Dark pulp visual language.
 
 ## Design Rationale
@@ -46,6 +54,7 @@ Freeze MVP boundaries so implementation can begin without design drift.
 ## Change Control
 
 Any change to locked decisions requires:
+
 - updated spec delta note,
 - explicit acceptance-criteria change,
 - and test impact summary.

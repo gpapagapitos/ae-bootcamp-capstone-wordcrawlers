@@ -7,7 +7,14 @@ interface TitleScreenProps {
   onAbandonCorrupted: () => void;
 }
 
-export function TitleScreen({ hasSave, savedAt, loadError, onContinue, onNewRun, onAbandonCorrupted }: TitleScreenProps) {
+export function TitleScreen({
+  hasSave,
+  savedAt,
+  loadError,
+  onContinue,
+  onNewRun,
+  onAbandonCorrupted,
+}: TitleScreenProps) {
   return (
     <div className="title-screen">
       <div className="title-screen-content">
@@ -16,7 +23,11 @@ export function TitleScreen({ hasSave, savedAt, loadError, onContinue, onNewRun,
         {loadError ? (
           <div className="save-alert" role="alert">
             <p>{loadError}</p>
-            <button type="button" className="ink-button" onClick={onAbandonCorrupted}>
+            <button
+              type="button"
+              className="ink-button"
+              onClick={onAbandonCorrupted}
+            >
               Abandon Saved Run
             </button>
           </div>
@@ -24,14 +35,22 @@ export function TitleScreen({ hasSave, savedAt, loadError, onContinue, onNewRun,
 
         <div className="title-screen-actions">
           {hasSave ? (
-            <button type="button" className="ink-button ink-button-primary title-screen-button" onClick={onContinue}>
+            <button
+              type="button"
+              className="ink-button ink-button-primary title-screen-button"
+              onClick={onContinue}
+            >
               <span>Continue</span>
-              {savedAt ? <span className="title-screen-savedat">{new Date(savedAt).toLocaleString()}</span> : null}
+              {savedAt ? (
+                <span className="title-screen-savedat">
+                  {new Date(savedAt).toLocaleString()}
+                </span>
+              ) : null}
             </button>
           ) : null}
           <button
             type="button"
-            className={`ink-button title-screen-button${hasSave ? '' : ' ink-button-primary'}`}
+            className={`ink-button title-screen-button${hasSave ? "" : " ink-button-primary"}`}
             onClick={onNewRun}
           >
             New Run

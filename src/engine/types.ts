@@ -1,14 +1,15 @@
-export type HeroId = 'duelist' | 'arcanist';
+export type HeroId = "duelist" | "arcanist";
 
-export type TurnPhase = 'prep' | 'spell' | 'clash' | 'cleanup' | 'ended';
+export type TurnPhase = "prep" | "spell" | "clash" | "cleanup" | "ended";
 
-export type EnemyIntentType = 'attack' | 'block' | 'hex' | 'debuff' | 'charge';
+export type EnemyIntentType = "attack" | "block" | "hex" | "debuff" | "charge";
 
 /** Splay direction per spec 009 R1: determines top card and which edge values count. */
-export type SplayDirection = 'left' | 'right';
+export type SplayDirection = "left" | "right";
 
 /** Card kinds that pass ability/fatigue through to the card beneath them (spec 009 R2), plus 'enemyVowel' which has a real ability. */
-export type CardKind = 'letter' | 'wild' | 'letterOfChoice' | 'penalty' | 'enemyVowel';
+export type CardKind =
+  "letter" | "wild" | "letterOfChoice" | "penalty" | "enemyVowel";
 
 export interface CardEdge {
   hits: number;
@@ -72,10 +73,11 @@ export interface EnemyState {
 }
 
 /** An item or relic effect vocabulary kept intentionally small (spec 009 R9). */
-export type ItemEffectType = 'gainHits' | 'gainBlocks' | 'gainEnergy' | 'applyHex';
+export type ItemEffectType =
+  "gainHits" | "gainBlocks" | "gainEnergy" | "applyHex";
 
 /** Conditions that auto-fire a Relic's effect (spec 009 R9: relics trigger on stated conditions, no energy cost). */
-export type RelicTrigger = 'onStageFlip' | 'onWordWithoutWild';
+export type RelicTrigger = "onStageFlip" | "onWordWithoutWild";
 
 export interface ItemDef {
   id: string;
@@ -131,7 +133,7 @@ export interface RunState {
   enemyVowelAvailable: boolean;
   items: ItemInstance[];
   actionLog: ActionLogEntry[];
-  dictionaryMode: 'strict';
+  dictionaryMode: "strict";
 }
 
 export interface ClashResult {

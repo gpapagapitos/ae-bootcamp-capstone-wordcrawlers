@@ -98,4 +98,3 @@ Last updated: 2026-08-03T15:41:29.946Z
   - tags: #ux #onboarding
   - spec refs: specs/009-board-game-rules-fidelity/spec.md, specs/010-tutorial-mode/spec.md
   - notes: Implemented step-driven TutorialOverlay (spec 010): step config array, tutorialSeen localStorage flag, replay via Help button in CombatHud. Covers hand, splay left/right, Wild letter input, Enemy Vowel, Items, and enemy intent. Tests cover step-advancement and persisted-seen flag.
-

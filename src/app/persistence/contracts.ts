@@ -1,16 +1,16 @@
-import type { ActMap } from '../map/types.js';
-import type { Card, HeroId, RunState } from '../../engine/types.js';
-import type { EventBuff, EventChoice, EventDef } from '../content/events.js';
+import type { ActMap } from "../map/types.js";
+import type { Card, HeroId, RunState } from "../../engine/types.js";
+import type { EventBuff, EventChoice, EventDef } from "../content/events.js";
 
 export const RUN_SAVE_SCHEMA_VERSION = 1;
 
 export const RUN_SAVE_KEYS = {
-  temp: 'wordcrawlers.run.temp.v1',
-  current: 'wordcrawlers.run.current.v1',
-  previous: 'wordcrawlers.run.previous.v1'
+  temp: "wordcrawlers.run.temp.v1",
+  current: "wordcrawlers.run.current.v1",
+  previous: "wordcrawlers.run.previous.v1",
 } as const;
 
-export type SaveSlot = 'current' | 'previous';
+export type SaveSlot = "current" | "previous";
 
 export interface EncounterRecord {
   nodeId: string;
@@ -25,7 +25,7 @@ export interface CombatSnapshot {
   lastError: string | null;
 }
 
-export type ModalType = 'reward' | 'shop' | 'rest' | 'event' | null;
+export type ModalType = "reward" | "shop" | "rest" | "event" | null;
 
 export interface ProgressionSnapshot {
   heroId: HeroId;
@@ -65,14 +65,14 @@ export interface RunSaveEnvelope {
 }
 
 export type SaveErrorReason =
-  | 'storage-unavailable'
-  | 'write-failed'
-  | 'invalid-json'
-  | 'missing-field'
-  | 'invalid-checksum'
-  | 'unsupported-schema'
-  | 'corrupt-payload'
-  | 'not-found';
+  | "storage-unavailable"
+  | "write-failed"
+  | "invalid-json"
+  | "missing-field"
+  | "invalid-checksum"
+  | "unsupported-schema"
+  | "corrupt-payload"
+  | "not-found";
 
 export interface SaveResult {
   ok: boolean;

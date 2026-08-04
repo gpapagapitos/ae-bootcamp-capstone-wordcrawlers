@@ -23,14 +23,17 @@ Vault reclaimed is a grounded fantasy survival tone: weathered stone, moss, root
 ## Palette Candidates
 
 1. Verdant Vault
+
 - Moss green, root brown, stone gray, parchment, brass.
 - Best for: natural overgrowth, ruin exploration, and calmer readability.
 
 2. Ember Canopy
+
 - Deep fern, ember clay, charcoal bark, faded bone paper, warm gold.
 - Best for: a more dramatic, sunset-wilderness feel with stronger contrast.
 
 3. Reed and Resin
+
 - Wet earth, lichen green, river slate, cedar, oxidized bronze.
 - Best for: a more grounded, expeditionary look.
 
@@ -39,16 +42,20 @@ Recommended direction: Verdant Vault.
 ## Visual Pillars
 
 1. Earth recovered
+
 - Layered stone, bark, moss, and parchment textures.
 - Overgrowth, roots, and weathered relics should be part of the frame language.
 
 2. Combat readability first
+
 - Enemy intent, pending damage, and card effects are always visible.
 
 3. Satisfying word payoff
+
 - On submit, letters snap into a spell ribbon; damage pulses with clear numbers.
 
 4. Original card identity
+
 - Vault-born mood, but original composition, symbols, and frame language.
 - Readability and a11y rules override decorative details when conflicts appear.
 

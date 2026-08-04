@@ -28,7 +28,6 @@ Commands:
 - In-flight focus:
   - WC-001: Build combat HUD with hand, intent, and action log (in-progress)
 
-
 ### Snapshot 2026-07-31T17:06:38.544Z
 
 - Backlog: 2
@@ -38,7 +37,6 @@ Commands:
 
 - In-flight focus:
   - WC-001: Build combat HUD with hand, intent, and action log (in-progress)
-
 
 ### Snapshot 2026-07-31T17:09:32.969Z
 
@@ -50,7 +48,6 @@ Commands:
 - In-flight focus:
   - WC-001: Build combat HUD with hand, intent, and action log (in-progress)
 
-
 ### Snapshot 2026-07-31T17:10:47.522Z
 
 - Backlog: 2
@@ -60,7 +57,6 @@ Commands:
 
 - In-flight focus:
   - WC-001: Build combat HUD with hand, intent, and action log (in-progress)
-
 
 ### Snapshot 2026-07-31T17:15:44.425Z
 
@@ -72,7 +68,6 @@ Commands:
 - In-flight focus:
   - none
 
-
 ### Snapshot 2026-07-31T17:16:47.936Z
 
 - Backlog: 11
@@ -82,7 +77,6 @@ Commands:
 
 - In-flight focus:
   - none
-
 
 ### Snapshot 2026-07-31T17:18:00.310Z
 
@@ -94,7 +88,6 @@ Commands:
 - In-flight focus:
   - none
 
-
 ### Snapshot 2026-07-31T17:23:31.365Z
 
 - Backlog: 7
@@ -104,7 +97,6 @@ Commands:
 
 - In-flight focus:
   - none
-
 
 ### Snapshot 2026-07-31T17:27:58.315Z
 
@@ -116,7 +108,6 @@ Commands:
 - In-flight focus:
   - none
 
-
 ### Snapshot 2026-07-31T17:27:59.986Z
 
 - Backlog: 7
@@ -127,7 +118,6 @@ Commands:
 - In-flight focus:
   - none
 
-
 ### Snapshot 2026-08-03T15:28:53.483Z
 
 - Backlog: 7
@@ -137,4 +127,3 @@ Commands:
 
 - In-flight focus:
   - none
-

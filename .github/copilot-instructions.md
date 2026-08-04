@@ -1,6 +1,7 @@
 # Wordcrawlers Guidelines
 
 ## SpecKit Memory
+
 The `.specify/memory/` directory holds context files maintained during spec-driven
 development. Read them before generating specs, plans, or implementation:
 
@@ -10,6 +11,7 @@ development. Read them before generating specs, plans, or implementation:
 - [decisions.md](../.specify/memory/decisions.md) — design decisions recorded during spec sessions
 
 ## Architecture
+
 - `src/engine/**` is pure game logic (no React/DOM); `src/app/**` (stores, components) is
   the UI/state layer that wraps it. Keep that boundary — engine functions take/return
   plain state objects, never touch stores or components directly.
@@ -22,10 +24,12 @@ development. Read them before generating specs, plans, or implementation:
   hex/boon, penalty cards, and shop rules all live there.
 
 ## Build and Test
+
 - `npm run test` (vitest), `npm run lint` (eslint), `npm run typecheck` (tsc --noEmit).
   Run all three before considering engine/app changes done.
 
 ## Conventions
+
 - **Balance-affecting changes need explicit user sign-off before implementing** — e.g.
   hero HP/energy baselines, damage numbers, enemy stats. Flag the gap and ask; don't
   "fix" a stat mismatch against the rulebook on your own initiative.

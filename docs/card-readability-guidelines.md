@@ -11,18 +11,23 @@ Related implementation contract: `specs/004-card-visual-a11y/spec.md`
 ## Card Information Hierarchy
 
 1. Letter anchor
+
 - Largest element on card face.
 
 2. Card title and role
+
 - Title plus short role tag (attack/control/utility).
 
 3. Ability timing
+
 - Fixed labels such as On Submit, On Clash, On Cleanup.
 
 4. Ability effect sentence
+
 - One concise sentence with explicit actor and outcome.
 
 5. Reminder text
+
 - Optional small text for edge case clarification.
 
 ## Text Standards

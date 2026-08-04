@@ -1,36 +1,36 @@
-import js from '@eslint/js';
-import tsParser from '@typescript-eslint/parser';
-import tsPlugin from '@typescript-eslint/eslint-plugin';
+import js from "@eslint/js";
+import tsParser from "@typescript-eslint/parser";
+import tsPlugin from "@typescript-eslint/eslint-plugin";
 
 export default [
   js.configs.recommended,
   {
-    files: ['**/*.ts'],
+    files: ["**/*.ts"],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
-        project: './tsconfig.json'
-      }
+        project: "./tsconfig.json",
+      },
     },
     plugins: {
-      '@typescript-eslint': tsPlugin
+      "@typescript-eslint": tsPlugin,
     },
     rules: {
       ...tsPlugin.configs.recommended.rules,
-      '@typescript-eslint/no-explicit-any': 'error'
-    }
+      "@typescript-eslint/no-explicit-any": "error",
+    },
   },
   {
     // vite.config.ts and scripts legitimately use Node globals
-    files: ['scripts/**/*.mjs', 'vite.config.ts'],
+    files: ["scripts/**/*.mjs", "vite.config.ts"],
     languageOptions: {
       globals: {
-        process: 'readonly',
-        console: 'readonly'
-      }
-    }
+        process: "readonly",
+        console: "readonly",
+      },
+    },
   },
   {
-    ignores: ['dist/**', 'node_modules/**']
-  }
+    ignores: ["dist/**", "node_modules/**"],
+  },
 ];

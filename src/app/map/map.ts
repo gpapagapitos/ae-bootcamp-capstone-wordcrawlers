@@ -1,5 +1,5 @@
-import { createRng } from '../../engine/rng.js';
-import type { ActMap, MapNode, MapNodeType } from './types.js';
+import { createRng } from "../../engine/rng.js";
+import type { ActMap, MapNode, MapNodeType } from "./types.js";
 
 /**
  * StS-style branching map: several independent random walks across a wide column band,
@@ -15,7 +15,16 @@ const BOSS_COL = Math.floor(COLS / 2);
 const FIRST_THIRD_ROW = Math.floor(ROWS / 3);
 const MAX_EVENTS_IN_FIRST_THIRD = 1;
 
-const NODE_POOL: MapNodeType[] = ['battle', 'battle', 'battle', 'event', 'treasure', 'shop', 'rest', 'elite'];
+const NODE_POOL: MapNodeType[] = [
+  "battle",
+  "battle",
+  "battle",
+  "event",
+  "treasure",
+  "shop",
+  "rest",
+  "elite",
+];
 
 function nodeId(row: number, lane: number): string {
   return `r${row}-l${lane}`;
@@ -51,7 +60,9 @@ function buildWalkGraph(rng: { next: () => number }): WalkGraph {
   for (let path = 0; path < PATH_COUNT; path += 1) {
     const spread = Math.floor((path + 0.5) * (COLS / PATH_COUNT));
     const wobbleRoll = rng.next();
-    const startCol = clampCol(spread + (wobbleRoll < 0.34 ? -1 : wobbleRoll < 0.68 ? 1 : 0));
+    const startCol = clampCol(
+      spread + (wobbleRoll < 0.34 ? -1 : wobbleRoll < 0.68 ? 1 : 0),
+    );
 
     let col = startCol;
     let previousId = nodeId(0, col);
@@ -77,7 +88,7 @@ function buildWalkGraph(rng: { next: () => number }): WalkGraph {
 }
 
 function parseNodeId(id: string): { row: number; lane: number } {
-  const [rowPart, lanePart] = id.slice(1).split('-l');
+  const [rowPart, lanePart] = id.slice(1).split("-l");
   return { row: Number(rowPart), lane: Number(lanePart) };
 }
 
@@ -87,39 +98,43 @@ function pickNodeType(
   lane: number,
   rng: { next: () => number },
   parentTypes: MapNodeType[],
-  eventsInFirstThird: { count: number }
+  eventsInFirstThird: { count: number },
 ): MapNodeType {
   if (row === BOSS_ROW) {
-    return 'boss';
+    return "boss";
   }
   if (row === 0) {
-    return lane % 2 === 0 ? 'battle' : 'event';
+    return lane % 2 === 0 ? "battle" : "event";
   }
   if (row === SUSTAIN_ROW) {
-    return lane % 2 === 0 ? 'rest' : 'shop';
+    return lane % 2 === 0 ? "rest" : "shop";
   }
 
-  const parentHasElite = parentTypes.includes('elite');
+  const parentHasElite = parentTypes.includes("elite");
   const inFirstThird = row < FIRST_THIRD_ROW;
 
   for (let attempt = 0; attempt < NODE_POOL.length; attempt += 1) {
     const index = Math.floor(rng.next() * NODE_POOL.length);
     const candidate = NODE_POOL[index];
 
-    if (candidate === 'elite' && (row <= 2 || parentHasElite)) {
+    if (candidate === "elite" && (row <= 2 || parentHasElite)) {
       continue;
     }
-    if (candidate === 'event' && inFirstThird && eventsInFirstThird.count >= MAX_EVENTS_IN_FIRST_THIRD) {
+    if (
+      candidate === "event" &&
+      inFirstThird &&
+      eventsInFirstThird.count >= MAX_EVENTS_IN_FIRST_THIRD
+    ) {
       continue;
     }
 
-    if (candidate === 'event' && inFirstThird) {
+    if (candidate === "event" && inFirstThird) {
       eventsInFirstThird.count += 1;
     }
     return candidate;
   }
 
-  return 'battle';
+  return "battle";
 }
 
 export function generateAct1Map(seed: number): ActMap {
@@ -128,7 +143,7 @@ export function generateAct1Map(seed: number): ActMap {
 
   const ordered = Array.from(nodeIds)
     .map((id) => ({ id, ...parseNodeId(id) }))
-    .sort((a, b) => (a.row - b.row) || (a.lane - b.lane));
+    .sort((a, b) => a.row - b.row || a.lane - b.lane);
 
   const typesById = new Map<string, MapNodeType>();
   const eventsInFirstThird = { count: 0 };
@@ -138,29 +153,31 @@ export function generateAct1Map(seed: number): ActMap {
       .map((parentId) => typesById.get(parentId))
       .filter((type): type is MapNodeType => Boolean(type));
 
-    typesById.set(entry.id, pickNodeType(entry.row, entry.lane, rng, parentTypes, eventsInFirstThird));
+    typesById.set(
+      entry.id,
+      pickNodeType(entry.row, entry.lane, rng, parentTypes, eventsInFirstThird),
+    );
   }
 
   const nodes: MapNode[] = ordered.map((entry) => ({
     id: entry.id,
     row: entry.row,
     lane: entry.lane,
-    type: typesById.get(entry.id) ?? 'battle'
+    type: typesById.get(entry.id) ?? "battle",
   }));
 
   const edges = Array.from(edgeKeys).map((key) => {
-    const [from, to] = key.split('->');
+    const [from, to] = key.split("->");
     return { from, to };
   });
 
   return { nodes, edges };
 }
 
-
 export function getSelectableNodeIds(
   map: ActMap,
   currentNodeId: string | null,
-  visitedNodeIds: string[]
+  visitedNodeIds: string[],
 ): string[] {
   if (!currentNodeId) {
     return map.nodes.filter((n) => n.row === 0).map((n) => n.id);
@@ -176,21 +193,21 @@ export function getSelectableNodeIds(
 
 export function resolveNodeLabel(type: MapNodeType): string {
   switch (type) {
-    case 'battle':
-      return 'Battle';
-    case 'elite':
-      return 'Elite';
-    case 'event':
-      return 'Event';
-    case 'treasure':
-      return 'Treasure';
-    case 'shop':
-      return 'Shop';
-    case 'rest':
-      return 'Rest';
-    case 'boss':
-      return 'Boss';
+    case "battle":
+      return "Battle";
+    case "elite":
+      return "Elite";
+    case "event":
+      return "Event";
+    case "treasure":
+      return "Treasure";
+    case "shop":
+      return "Shop";
+    case "rest":
+      return "Rest";
+    case "boss":
+      return "Boss";
     default:
-      return 'Unknown';
+      return "Unknown";
   }
 }

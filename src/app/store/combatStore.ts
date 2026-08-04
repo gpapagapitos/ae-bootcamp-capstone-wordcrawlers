@@ -1,13 +1,18 @@
-import { create } from 'zustand';
-import { passTurn, runPrepPhase, submitComposedCards, useItem as engineUseItem } from '../../engine/turn.js';
-import { createInitialRunState } from '../../engine/state.js';
-import { createRng, shuffleInPlace } from '../../engine/rng.js';
-import type { Card } from '../../engine/types.js';
-import type { HeroId, RunState, SplayDirection } from '../../engine/types.js';
-import type { EventBuff } from '../content/events.js';
+import { create } from "zustand";
+import {
+  passTurn,
+  runPrepPhase,
+  submitComposedCards,
+  useItem as engineUseItem,
+} from "../../engine/turn.js";
+import { createInitialRunState } from "../../engine/state.js";
+import { createRng, shuffleInPlace } from "../../engine/rng.js";
+import type { Card } from "../../engine/types.js";
+import type { HeroId, RunState, SplayDirection } from "../../engine/types.js";
+import type { EventBuff } from "../content/events.js";
 
-export const WILD_CARD_ID = 'WILD';
-export const ENEMY_VOWEL_CARD_ID = 'ENEMY_VOWEL';
+export const WILD_CARD_ID = "WILD";
+export const ENEMY_VOWEL_CARD_ID = "ENEMY_VOWEL";
 
 interface CombatState {
   encounterNodeId: string | null;
@@ -25,7 +30,7 @@ interface CombatState {
     boon?: number,
     heroHp?: number,
     heroMaxHp?: number,
-    pendingBuff?: EventBuff | null
+    pendingBuff?: EventBuff | null,
   ) => void;
   leaveEncounter: () => void;
   beginSpellPhase: () => void;
@@ -43,12 +48,12 @@ interface CombatState {
   setError: (message: string) => void;
 }
 
-const DEFAULT_HERO: HeroId = 'duelist';
+const DEFAULT_HERO: HeroId = "duelist";
 
 function cloneCard(card: Card): Card {
   return {
     ...card,
-    tags: [...card.tags]
+    tags: [...card.tags],
   };
 }
 
@@ -59,7 +64,7 @@ function createEncounterState(
   boon = 0,
   heroHp?: number,
   heroMaxHp?: number,
-  pendingBuff?: EventBuff | null
+  pendingBuff?: EventBuff | null,
 ): RunState {
   const run = createInitialRunState(seed, heroId, boon);
   if (heroMaxHp !== undefined) {
@@ -70,11 +75,11 @@ function createEncounterState(
   }
 
   if (pendingBuff) {
-    if (pendingBuff.type === 'heroBonusEnergy') {
+    if (pendingBuff.type === "heroBonusEnergy") {
       run.hero.energy += pendingBuff.value;
-    } else if (pendingBuff.type === 'heroBonusBlock') {
+    } else if (pendingBuff.type === "heroBonusBlock") {
       run.hero.block += pendingBuff.value;
-    } else if (pendingBuff.type === 'enemyHex') {
+    } else if (pendingBuff.type === "enemyHex") {
       run.enemy.hex += pendingBuff.value;
     }
   }
@@ -99,7 +104,7 @@ function createEncounterState(
     run.deck.hand.push(card);
   }
 
-  run.actionLog = [{ turn: run.turn, message: 'Run started. Draw 7 cards.' }];
+  run.actionLog = [{ turn: run.turn, message: "Run started. Draw 7 cards." }];
   return run;
 }
 
@@ -108,30 +113,52 @@ export const useCombatStore = create<CombatState>((set, get) => ({
   run: null,
   heroId: DEFAULT_HERO,
   composedCardIds: [],
-  splay: 'right',
-  wildLetter: '',
+  splay: "right",
+  wildLetter: "",
   lastError: null,
 
-  startEncounter: (nodeId: string, seed = Date.now(), runDeck, heroId, boon = 0, heroHp, heroMaxHp, pendingBuff) => {
+  startEncounter: (
+    nodeId: string,
+    seed = Date.now(),
+    runDeck,
+    heroId,
+    boon = 0,
+    heroHp,
+    heroMaxHp,
+    pendingBuff,
+  ) => {
     const resolvedHeroId = heroId ?? get().heroId;
     set({
       encounterNodeId: nodeId,
-      run: createEncounterState(seed, resolvedHeroId, runDeck, boon, heroHp, heroMaxHp, pendingBuff),
+      run: createEncounterState(
+        seed,
+        resolvedHeroId,
+        runDeck,
+        boon,
+        heroHp,
+        heroMaxHp,
+        pendingBuff,
+      ),
       heroId: resolvedHeroId,
       composedCardIds: [],
-      splay: 'right',
-      wildLetter: '',
-      lastError: null
+      splay: "right",
+      wildLetter: "",
+      lastError: null,
     });
   },
 
   leaveEncounter: () => {
-    set({ encounterNodeId: null, run: null, composedCardIds: [], lastError: null });
+    set({
+      encounterNodeId: null,
+      run: null,
+      composedCardIds: [],
+      lastError: null,
+    });
   },
 
   beginSpellPhase: () => {
     const run = get().run;
-    if (!run || run.phase !== 'prep') {
+    if (!run || run.phase !== "prep") {
       return;
     }
 
@@ -141,13 +168,13 @@ export const useCombatStore = create<CombatState>((set, get) => ({
 
   toggleComposedCard: (cardId: string) => {
     const run = get().run;
-    if (!run || run.phase !== 'spell') {
+    if (!run || run.phase !== "spell") {
       return;
     }
 
     const cardInHand = run.deck.hand.some((card) => card.id === cardId);
     if (!cardInHand) {
-      set({ lastError: 'Selected card is no longer available in hand.' });
+      set({ lastError: "Selected card is no longer available in hand." });
       return;
     }
 
@@ -156,12 +183,15 @@ export const useCombatStore = create<CombatState>((set, get) => ({
     if (alreadySelected) {
       set({
         composedCardIds: state.composedCardIds.filter((id) => id !== cardId),
-        lastError: null
+        lastError: null,
       });
       return;
     }
 
-    set({ composedCardIds: [...state.composedCardIds, cardId], lastError: null });
+    set({
+      composedCardIds: [...state.composedCardIds, cardId],
+      lastError: null,
+    });
   },
 
   undoComposedLetter: () => {
@@ -170,7 +200,10 @@ export const useCombatStore = create<CombatState>((set, get) => ({
       return;
     }
 
-    set({ composedCardIds: state.composedCardIds.slice(0, -1), lastError: null });
+    set({
+      composedCardIds: state.composedCardIds.slice(0, -1),
+      lastError: null,
+    });
   },
 
   clearComposedWord: () => {
@@ -187,37 +220,53 @@ export const useCombatStore = create<CombatState>((set, get) => ({
 
   toggleWildCard: () => {
     const run = get().run;
-    if (!run || run.phase !== 'spell') {
+    if (!run || run.phase !== "spell") {
       return;
     }
 
     const state = get();
     if (state.composedCardIds.includes(WILD_CARD_ID)) {
-      set({ composedCardIds: state.composedCardIds.filter((id) => id !== WILD_CARD_ID), lastError: null });
+      set({
+        composedCardIds: state.composedCardIds.filter(
+          (id) => id !== WILD_CARD_ID,
+        ),
+        lastError: null,
+      });
       return;
     }
 
-    set({ composedCardIds: [...state.composedCardIds, WILD_CARD_ID], lastError: null });
+    set({
+      composedCardIds: [...state.composedCardIds, WILD_CARD_ID],
+      lastError: null,
+    });
   },
 
   toggleEnemyVowelCard: () => {
     const run = get().run;
-    if (!run || run.phase !== 'spell' || !run.enemyVowelAvailable) {
+    if (!run || run.phase !== "spell" || !run.enemyVowelAvailable) {
       return;
     }
 
     const state = get();
     if (state.composedCardIds.includes(ENEMY_VOWEL_CARD_ID)) {
-      set({ composedCardIds: state.composedCardIds.filter((id) => id !== ENEMY_VOWEL_CARD_ID), lastError: null });
+      set({
+        composedCardIds: state.composedCardIds.filter(
+          (id) => id !== ENEMY_VOWEL_CARD_ID,
+        ),
+        lastError: null,
+      });
       return;
     }
 
-    set({ composedCardIds: [...state.composedCardIds, ENEMY_VOWEL_CARD_ID], lastError: null });
+    set({
+      composedCardIds: [...state.composedCardIds, ENEMY_VOWEL_CARD_ID],
+      lastError: null,
+    });
   },
 
   useItem: (itemId: string) => {
     const run = get().run;
-    if (!run || run.phase !== 'spell') {
+    if (!run || run.phase !== "spell") {
       return;
     }
 
@@ -225,60 +274,79 @@ export const useCombatStore = create<CombatState>((set, get) => ({
       engineUseItem(run, itemId);
       set({ run: { ...run }, lastError: null });
     } catch (error) {
-      set({ lastError: error instanceof Error ? error.message : 'Failed to use item.' });
+      set({
+        lastError:
+          error instanceof Error ? error.message : "Failed to use item.",
+      });
     }
   },
 
   submitComposedWord: () => {
     const run = get().run;
-    if (!run || run.phase !== 'spell') {
+    if (!run || run.phase !== "spell") {
       return;
     }
 
     const { composedCardIds, splay, wildLetter } = get();
     if (composedCardIds.length === 0) {
-      set({ lastError: 'Compose a word before submitting.' });
+      set({ lastError: "Compose a word before submitting." });
       return;
     }
 
-    if (composedCardIds.includes(WILD_CARD_ID) && !/^[a-z]$/i.test(wildLetter)) {
-      set({ lastError: 'Choose a letter for the Wild card before casting.' });
+    if (
+      composedCardIds.includes(WILD_CARD_ID) &&
+      !/^[a-z]$/i.test(wildLetter)
+    ) {
+      set({ lastError: "Choose a letter for the Wild card before casting." });
       return;
     }
 
     const handById = new Map(run.deck.hand.map((card) => [card.id, card]));
-    const composedCards = composedCardIds.map((id) => {
-      if (id === WILD_CARD_ID) {
-        return { ...run.wildCard, letter: wildLetter };
-      }
-      if (id === ENEMY_VOWEL_CARD_ID) {
-        return {
-          ...run.wildCard,
-          id: 'enemy-vowel-active',
-          letter: run.enemy.weakVowel ?? '',
-          kind: 'enemyVowel' as const,
-          ability: "Advances the enemy's intent to its next action."
-        };
-      }
-      return handById.get(id);
-    }).filter((card): card is NonNullable<typeof card> => Boolean(card));
+    const composedCards = composedCardIds
+      .map((id) => {
+        if (id === WILD_CARD_ID) {
+          return { ...run.wildCard, letter: wildLetter };
+        }
+        if (id === ENEMY_VOWEL_CARD_ID) {
+          return {
+            ...run.wildCard,
+            id: "enemy-vowel-active",
+            letter: run.enemy.weakVowel ?? "",
+            kind: "enemyVowel" as const,
+            ability: "Advances the enemy's intent to its next action.",
+          };
+        }
+        return handById.get(id);
+      })
+      .filter((card): card is NonNullable<typeof card> => Boolean(card));
 
     if (composedCards.length !== composedCardIds.length) {
-      set({ lastError: 'Composed word is out of sync with hand. Rebuild and submit again.' });
+      set({
+        lastError:
+          "Composed word is out of sync with hand. Rebuild and submit again.",
+      });
       return;
     }
 
     try {
       submitComposedCards(run, composedCards, splay);
-      set({ run: { ...run }, composedCardIds: [], wildLetter: '', lastError: null });
+      set({
+        run: { ...run },
+        composedCardIds: [],
+        wildLetter: "",
+        lastError: null,
+      });
     } catch (error) {
-      set({ lastError: error instanceof Error ? error.message : 'Failed to submit word.' });
+      set({
+        lastError:
+          error instanceof Error ? error.message : "Failed to submit word.",
+      });
     }
   },
 
   passCurrentTurn: () => {
     const run = get().run;
-    if (!run || run.phase !== 'spell') {
+    if (!run || run.phase !== "spell") {
       return;
     }
 
@@ -292,5 +360,5 @@ export const useCombatStore = create<CombatState>((set, get) => ({
 
   setError: (message: string) => {
     set({ lastError: message });
-  }
+  },
 }));

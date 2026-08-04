@@ -1,6 +1,6 @@
 ---
 name: rules-fidelity
-description: 'Use when the user pastes new rulebook pages/excerpts from Paperback Adventures (docs/Paperback_Adventures_rulebook.pdf), asks to reconcile game code/specs with the source board game rules, questions enemy vulnerabilities/actions/mechanics fidelity, or asks to audit specs 001-009 for consistency with the rulebook. Synthesizes rulebook text into spec 009, cross-checks other specs for contradictions, and flags balance-affecting gaps for user sign-off instead of silently changing them.'
+description: "Use when the user pastes new rulebook pages/excerpts from Paperback Adventures (docs/Paperback_Adventures_rulebook.pdf), asks to reconcile game code/specs with the source board game rules, questions enemy vulnerabilities/actions/mechanics fidelity, or asks to audit specs 001-009 for consistency with the rulebook. Synthesizes rulebook text into spec 009, cross-checks other specs for contradictions, and flags balance-affecting gaps for user sign-off instead of silently changing them."
 ---
 
 # Rules Fidelity
@@ -10,6 +10,7 @@ synthesis of the real Paperback Adventures rulebook, and keeps specs 001-008 fro
 drifting out of sync with it.
 
 ## When to Use
+
 - User pastes rulebook text (credits, setup, component lists, card text, enemy rules).
 - User asks whether an enemy/mechanic/action matches "the rules" or the rulebook.
 - User asks to write or update specs for rules, enemy vulnerabilities, or actions.
@@ -26,8 +27,8 @@ drifting out of sync with it.
    - Already covered: verify the existing rule text is accurate/complete against the new
      source text; tighten wording if the rulebook is more specific than what's written.
    - Not covered: add a new `### RN` section following the existing format (rule bullets
-     + at least one acceptance criterion), and add it to the "Amendments to Existing
-     Specs" section if it changes/contradicts specs 001-008.
+     - at least one acceptance criterion), and add it to the "Amendments to Existing
+       Specs" section if it changes/contradicts specs 001-008.
 3. **Cross-check specs 001-008** for now-contradicted requirements (e.g. a stacking
    penalty, a stat baseline, a structural assumption). Do not leave stale contradictory
    text — either amend it in place with a pointer to the superseding spec 009 rule, or
@@ -47,6 +48,7 @@ drifting out of sync with it.
    what was added/changed, what's still a gap, any gotchas hit.
 
 ## Anti-patterns
+
 - Duplicating rulebook prose into multiple specs instead of pointing at spec 009.
 - Silently "fixing" a stat mismatch (e.g. hero HP) to match the rulebook without asking.
 - Adding a new mechanic to spec 009 without checking specs 001-008 for contradictions.

@@ -1,6 +1,6 @@
-import { beforeEach, describe, expect, it } from 'vitest';
-import { EVENT_POOL } from '../../src/app/content/events.js';
-import { useProgressionStore } from '../../src/app/store/progressionStore.js';
+import { beforeEach, describe, expect, it } from "vitest";
+import { EVENT_POOL } from "../../src/app/content/events.js";
+import { useProgressionStore } from "../../src/app/store/progressionStore.js";
 
 function getEvent(id: string) {
   const event = EVENT_POOL.find((item) => item.id === id);
@@ -12,7 +12,7 @@ function getEvent(id: string) {
 
 function resetProgressionStore(): void {
   useProgressionStore.setState({
-    heroId: 'duelist',
+    heroId: "duelist",
     boon: 12,
     heroHp: 50,
     heroMaxHp: 50,
@@ -25,27 +25,27 @@ function resetProgressionStore(): void {
     eventResult: null,
     eventResultEffects: null,
     pendingBuff: null,
-    initialized: false
+    initialized: false,
   });
 }
 
-describe('progression store flows', () => {
+describe("progression store flows", () => {
   beforeEach(() => {
     resetProgressionStore();
   });
 
-  it('initializes run deck once from hero starter state', () => {
+  it("initializes run deck once from hero starter state", () => {
     const store = useProgressionStore.getState();
-    store.initializeRunDeck('duelist', 777);
+    store.initializeRunDeck("duelist", 777);
 
     const state = useProgressionStore.getState();
     expect(state.initialized).toBe(true);
     expect(state.runDeck.length).toBe(10);
   });
 
-  it('opens reward and adds selected card to run deck', () => {
+  it("opens reward and adds selected card to run deck", () => {
     const store = useProgressionStore.getState();
-    store.initializeRunDeck('duelist', 777);
+    store.initializeRunDeck("duelist", 777);
     store.openRewardModal(1000);
 
     const option = useProgressionStore.getState().rewardOptions[0];
@@ -59,9 +59,9 @@ describe('progression store flows', () => {
     expect(state.runDeck.some((card) => card.id === option.id)).toBe(true);
   });
 
-  it('supports buying (replacing a deck card) and removing cards in shop flow', () => {
+  it("supports buying (replacing a deck card) and removing cards in shop flow", () => {
     const store = useProgressionStore.getState();
-    store.initializeRunDeck('duelist', 777);
+    store.initializeRunDeck("duelist", 777);
     store.openShopModal(1000);
 
     const offer = useProgressionStore.getState().shopOffers[0];
@@ -73,7 +73,9 @@ describe('progression store flows', () => {
 
     const afterBuy = useProgressionStore.getState();
     expect(afterBuy.runDeck.some((card) => card.id === offer.id)).toBe(true);
-    expect(afterBuy.runDeck.some((card) => card.id === replaceTarget.id)).toBe(false);
+    expect(afterBuy.runDeck.some((card) => card.id === replaceTarget.id)).toBe(
+      false,
+    );
     expect(afterBuy.runDeck.length).toBe(deckBefore.length);
     expect(afterBuy.boon).toBeLessThan(boonBeforeBuy);
 
@@ -81,13 +83,15 @@ describe('progression store flows', () => {
     store.removeDeckCard(removable.id);
 
     const afterRemove = useProgressionStore.getState();
-    expect(afterRemove.runDeck.some((card) => card.id === removable.id)).toBe(false);
+    expect(afterRemove.runDeck.some((card) => card.id === removable.id)).toBe(
+      false,
+    );
     expect(afterRemove.boon).toBeLessThan(afterBuy.boon);
   });
 
-  it('resets progression for a fresh run', () => {
+  it("resets progression for a fresh run", () => {
     const store = useProgressionStore.getState();
-    store.initializeRunDeck('duelist', 777);
+    store.initializeRunDeck("duelist", 777);
     store.openRewardModal(1000);
 
     const option = useProgressionStore.getState().rewardOptions[0];
@@ -96,7 +100,7 @@ describe('progression store flows', () => {
     const beforeReset = useProgressionStore.getState();
     expect(beforeReset.runDeck.length).toBeGreaterThan(10);
 
-    store.resetProgression('duelist', 8899);
+    store.resetProgression("duelist", 8899);
 
     const afterReset = useProgressionStore.getState();
     expect(afterReset.activeModal).toBeNull();
@@ -107,13 +111,13 @@ describe('progression store flows', () => {
     expect(afterReset.initialized).toBe(true);
   });
 
-  it('rest node heals hero HP up to max', () => {
+  it("rest node heals hero HP up to max", () => {
     const store = useProgressionStore.getState();
-    store.initializeRunDeck('duelist', 777);
+    store.initializeRunDeck("duelist", 777);
     useProgressionStore.setState({ heroHp: 5, heroMaxHp: 50 });
     store.openRestModal(1000);
 
-    expect(useProgressionStore.getState().activeModal).toBe('rest');
+    expect(useProgressionStore.getState().activeModal).toBe("rest");
     store.chooseRestHeal();
 
     const state = useProgressionStore.getState();
@@ -122,9 +126,9 @@ describe('progression store flows', () => {
     expect(state.activeModal).toBeNull();
   });
 
-  it('rest node upgrades a chosen deck card', () => {
+  it("rest node upgrades a chosen deck card", () => {
     const store = useProgressionStore.getState();
-    store.initializeRunDeck('duelist', 777);
+    store.initializeRunDeck("duelist", 777);
     store.openRestModal(1000);
 
     const option = useProgressionStore.getState().restCardOptions[0];
@@ -136,19 +140,19 @@ describe('progression store flows', () => {
     const state = useProgressionStore.getState();
     const upgraded = state.runDeck.find((card) => card.id === option.id);
     expect(upgraded?.value).toBe(originalValue + 1);
-    expect(upgraded?.tags).toContain('upgraded');
+    expect(upgraded?.tags).toContain("upgraded");
     expect(state.activeModal).toBeNull();
   });
 
-  it('event node applies choice effects and can be dismissed', () => {
+  it("event node applies choice effects and can be dismissed", () => {
     const store = useProgressionStore.getState();
-    store.initializeRunDeck('duelist', 777);
+    store.initializeRunDeck("duelist", 777);
     store.openEventModal(2);
 
     const event = useProgressionStore.getState().eventDef;
     expect(event).toBeDefined();
     if (!event) {
-      throw new Error('expected event to be defined');
+      throw new Error("expected event to be defined");
     }
 
     store.chooseEventOption(event.choices[0].id);
@@ -156,52 +160,71 @@ describe('progression store flows', () => {
     const afterChoice = useProgressionStore.getState();
     expect(afterChoice.eventResult).toBe(event.choices[0].outcomeText);
     expect(afterChoice.eventResultEffects).toBe(event.choices[0]);
-    expect(afterChoice.activeModal).toBe('event');
+    expect(afterChoice.activeModal).toBe("event");
 
     store.closeModal();
     expect(useProgressionStore.getState().activeModal).toBeNull();
     expect(useProgressionStore.getState().eventResultEffects).toBeNull();
   });
 
-  it('rest node cleanses a cursed card from the deck', () => {
+  it("rest node cleanses a cursed card from the deck", () => {
     const store = useProgressionStore.getState();
-    store.initializeRunDeck('duelist', 777);
-    useProgressionStore.setState({ eventDef: getEvent('penance-stone'), eventResult: null, activeModal: 'event' });
-    store.chooseEventOption('accept-penance');
+    store.initializeRunDeck("duelist", 777);
+    useProgressionStore.setState({
+      eventDef: getEvent("penance-stone"),
+      eventResult: null,
+      activeModal: "event",
+    });
+    store.chooseEventOption("accept-penance");
 
     const beforeCleanse = useProgressionStore.getState();
-    const cursedCount = beforeCleanse.runDeck.filter((card) => card.kind === 'penalty').length;
+    const cursedCount = beforeCleanse.runDeck.filter(
+      (card) => card.kind === "penalty",
+    ).length;
     expect(cursedCount).toBeGreaterThan(0);
 
     store.openRestModal(1000);
     store.chooseRestCleanse();
 
     const afterCleanse = useProgressionStore.getState();
-    expect(afterCleanse.runDeck.filter((card) => card.kind === 'penalty').length).toBe(cursedCount - 1);
+    expect(
+      afterCleanse.runDeck.filter((card) => card.kind === "penalty").length,
+    ).toBe(cursedCount - 1);
     expect(afterCleanse.activeModal).toBeNull();
   });
 
-  it('event buff choice is queued and consumed exactly once', () => {
+  it("event buff choice is queued and consumed exactly once", () => {
     const store = useProgressionStore.getState();
-    store.initializeRunDeck('duelist', 777);
-    useProgressionStore.setState({ eventDef: getEvent('sunken-altar'), eventResult: null, activeModal: 'event' });
-    store.chooseEventOption('mark-the-road');
+    store.initializeRunDeck("duelist", 777);
+    useProgressionStore.setState({
+      eventDef: getEvent("sunken-altar"),
+      eventResult: null,
+      activeModal: "event",
+    });
+    store.chooseEventOption("mark-the-road");
 
-    expect(useProgressionStore.getState().pendingBuff).toEqual({ type: 'enemyHex', value: 3 });
+    expect(useProgressionStore.getState().pendingBuff).toEqual({
+      type: "enemyHex",
+      value: 3,
+    });
 
     const consumed = store.consumePendingBuff();
-    expect(consumed).toEqual({ type: 'enemyHex', value: 3 });
+    expect(consumed).toEqual({ type: "enemyHex", value: 3 });
     expect(useProgressionStore.getState().pendingBuff).toBeNull();
     expect(store.consumePendingBuff()).toBeNull();
   });
 
-  it('event card effect adds a card to the run deck', () => {
+  it("event card effect adds a card to the run deck", () => {
     const store = useProgressionStore.getState();
-    store.initializeRunDeck('duelist', 777);
+    store.initializeRunDeck("duelist", 777);
     const before = useProgressionStore.getState().runDeck.length;
 
-    useProgressionStore.setState({ eventDef: getEvent('wandering-scribe'), eventResult: null, activeModal: 'event' });
-    store.chooseEventOption('pay-copy');
+    useProgressionStore.setState({
+      eventDef: getEvent("wandering-scribe"),
+      eventResult: null,
+      activeModal: "event",
+    });
+    store.chooseEventOption("pay-copy");
 
     expect(useProgressionStore.getState().runDeck.length).toBe(before + 1);
   });

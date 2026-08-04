@@ -1,11 +1,5 @@
 export type MapNodeType =
-  | 'battle'
-  | 'elite'
-  | 'event'
-  | 'treasure'
-  | 'shop'
-  | 'rest'
-  | 'boss';
+  "battle" | "elite" | "event" | "treasure" | "shop" | "rest" | "boss";
 
 export interface MapNode {
   id: string;
