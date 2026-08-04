@@ -1,0 +1,298 @@
+{
+  "meta": {
+    "project": "Wordcrawlers",
+    "updatedAt": "2026-08-03T15:41:29.946Z"
+  },
+  "columns": [
+    {
+      "id": "backlog",
+      "title": "Backlog"
+    },
+    {
+      "id": "in-progress",
+      "title": "In Progress"
+    },
+    {
+      "id": "blocked",
+      "title": "Blocked"
+    },
+    {
+      "id": "done",
+      "title": "Done"
+    }
+  ],
+  "items": [
+    {
+      "id": "WC-001",
+      "title": "Build combat HUD with hand, intent, and action log",
+      "status": "done",
+      "priority": "P1",
+      "owner": "",
+      "tags": [
+        "ui",
+        "combat"
+      ],
+      "specRefs": [
+        "specs/001-core-run/tasks.md"
+      ],
+      "notes": "Completed: combat HUD with engine-wired hand tray, intent preview stack, and last-turn action log.",
+      "updatedAt": "2026-07-31T17:15:33.139Z"
+    },
+    {
+      "id": "WC-002",
+      "title": "Implement word entry UX (compose, submit, pass, feedback)",
+      "status": "done",
+      "priority": "P1",
+      "owner": "",
+      "tags": [
+        "ui",
+        "word-system"
+      ],
+      "specRefs": [
+        "specs/001-core-run/tasks.md"
+      ],
+      "notes": "Completed: manual word entry UX with compose rail, selectable hand letters, undo/clear, submit, pass, and strict-dictionary feedback.",
+      "updatedAt": "2026-07-31T17:15:36.783Z"
+    },
+    {
+      "id": "WC-003",
+      "title": "Design reward and shop modal flows",
+      "status": "done",
+      "priority": "P2",
+      "owner": "",
+      "tags": [
+        "ui",
+        "progression"
+      ],
+      "specRefs": [
+        "specs/001-core-run/tasks.md"
+      ],
+      "notes": "Implemented reward and shop modal flows with progression store, reward pick (3 options), shop buy/remove deck mutations, and map/combat wiring for post-victory rewards.",
+      "updatedAt": "2026-07-31T17:17:52.645Z"
+    },
+    {
+      "id": "WC-004",
+      "title": "Set up local board automation and handoff workflow",
+      "status": "done",
+      "priority": "P2",
+      "owner": "",
+      "tags": [
+        "workflow",
+        "docs"
+      ],
+      "specRefs": [
+        "docs/handoff.md",
+        "scripts/board.mjs",
+        "scripts/board-check.mjs"
+      ],
+      "notes": "Added board CLI commands, board integrity check, and handoff snapshot workflow.",
+      "updatedAt": "2026-07-31T17:06:37.780Z"
+    },
+    {
+      "id": "WC-005",
+      "title": "Implement run save envelope and adapter",
+      "status": "done",
+      "priority": "P1",
+      "owner": "",
+      "tags": [
+        "engine",
+        "persistence"
+      ],
+      "specRefs": [
+        "specs/005-save-resume-recovery/spec.md",
+        "specs/005-save-resume-recovery/tasks.md"
+      ],
+      "notes": "Completed: schema-versioned save envelope with checksum, atomic temp->current write, current/previous fallback load, and clear operation with typed error reasons plus unit tests.",
+      "updatedAt": "2026-07-31T12:20:00.000Z"
+    },
+    {
+      "id": "WC-006",
+      "title": "Add resume gate and recovery UX",
+      "status": "done",
+      "priority": "P1",
+      "owner": "",
+      "tags": [
+        "ui",
+        "persistence"
+      ],
+      "specRefs": [
+        "specs/005-save-resume-recovery/spec.md",
+        "specs/005-save-resume-recovery/tasks.md"
+      ],
+      "notes": "Completed: startup resume/abandon dialog with store hydration from save payload, save status badge (Saving/Saved/Failed), load/write error messaging, and debounced autosave persistence.",
+      "updatedAt": "2026-07-31T12:24:00.000Z"
+    },
+    {
+      "id": "WC-007",
+      "title": "Complete reward and shop progression flow",
+      "status": "done",
+      "priority": "P1",
+      "owner": "",
+      "tags": [
+        "progression",
+        "ui"
+      ],
+      "specRefs": [
+        "specs/001-core-run/tasks.md"
+      ],
+      "notes": "Completed: encounter outcome checks, reward/shop progression wiring, explicit run-end victory/defeat overlay, and new-run reset path across map/combat/progression stores.",
+      "updatedAt": "2026-07-31T12:25:00.000Z"
+    },
+    {
+      "id": "WC-008",
+      "title": "Enforce map generation contract and fairness",
+      "status": "backlog",
+      "priority": "P1",
+      "owner": "",
+      "tags": [
+        "map",
+        "determinism"
+      ],
+      "specRefs": [
+        "specs/007-map-generation-contract/spec.md",
+        "specs/007-map-generation-contract/tasks.md"
+      ],
+      "notes": "Seed determinism, route guarantees, and config validation.",
+      "updatedAt": "2026-07-31T00:00:00.000Z"
+    },
+    {
+      "id": "WC-009",
+      "title": "Implement Duelist and Arcanist hero definitions",
+      "status": "backlog",
+      "priority": "P1",
+      "owner": "",
+      "tags": [
+        "hero",
+        "content"
+      ],
+      "specRefs": [
+        "specs/008-hero-kit-identity-contract/spec.md",
+        "specs/008-hero-kit-identity-contract/tasks.md"
+      ],
+      "notes": "Hero contracts, starter decks, starter relics, and run init wiring.",
+      "updatedAt": "2026-07-31T00:00:00.000Z"
+    },
+    {
+      "id": "WC-010",
+      "title": "Add hero signature mechanics and logs",
+      "status": "backlog",
+      "priority": "P1",
+      "owner": "",
+      "tags": [
+        "hero",
+        "combat"
+      ],
+      "specRefs": [
+        "specs/008-hero-kit-identity-contract/spec.md",
+        "specs/008-hero-kit-identity-contract/tasks.md"
+      ],
+      "notes": "Deterministic signature hooks and action-log clarity.",
+      "updatedAt": "2026-07-31T00:00:00.000Z"
+    },
+    {
+      "id": "WC-011",
+      "title": "Build meta progression profile and unlock flow",
+      "status": "backlog",
+      "priority": "P2",
+      "owner": "",
+      "tags": [
+        "meta",
+        "progression"
+      ],
+      "specRefs": [
+        "specs/006-meta-progression-and-unlocks/spec.md",
+        "specs/006-meta-progression-and-unlocks/tasks.md"
+      ],
+      "notes": "Meta profile, deterministic currency awards, unlock transactions.",
+      "updatedAt": "2026-07-31T00:00:00.000Z"
+    },
+    {
+      "id": "WC-012",
+      "title": "Create meta progression UI",
+      "status": "backlog",
+      "priority": "P2",
+      "owner": "",
+      "tags": [
+        "meta",
+        "ui"
+      ],
+      "specRefs": [
+        "specs/006-meta-progression-and-unlocks/spec.md",
+        "specs/006-meta-progression-and-unlocks/tasks.md"
+      ],
+      "notes": "Currency panel, unlock list, prerequisites, and feedback states.",
+      "updatedAt": "2026-07-31T00:00:00.000Z"
+    },
+    {
+      "id": "WC-013",
+      "title": "Add deterministic integration and smoke tests",
+      "status": "backlog",
+      "priority": "P1",
+      "owner": "",
+      "tags": [
+        "testing",
+        "determinism"
+      ],
+      "specRefs": [
+        "specs/001-core-run/tasks.md",
+        "specs/005-save-resume-recovery/tasks.md",
+        "specs/007-map-generation-contract/tasks.md",
+        "specs/008-hero-kit-identity-contract/tasks.md"
+      ],
+      "notes": "Encounter integration, save/resume regression, and one E2E smoke path.",
+      "updatedAt": "2026-07-31T00:00:00.000Z"
+    },
+    {
+      "id": "WC-014",
+      "title": "Configure CI quality gates and traceability links",
+      "status": "backlog",
+      "priority": "P1",
+      "owner": "",
+      "tags": [
+        "ci",
+        "docs"
+      ],
+      "specRefs": [
+        "docs/capstone-traceability.md",
+        "specs/001-core-run/tasks.md"
+      ],
+      "notes": "Required lint/test/build checks and requirement-to-test linkage docs.",
+      "updatedAt": "2026-07-31T00:00:00.000Z"
+    },
+    {
+      "id": "WC-015",
+      "title": "Re-theme UI to parchment/tabletop aesthetic and fix combat layout bugs",
+      "status": "done",
+      "priority": "P1",
+      "owner": "",
+      "tags": [
+        "ui",
+        "combat",
+        "map",
+        "theme"
+      ],
+      "specRefs": [
+        "docs/ui-ux-direction.md"
+      ],
+      "notes": "Replaced dark dungeon gradient theme with flat parchment/ink palette; fixed dead-CSS layout bug causing duplicate combat panel and hidden Cast/Pass buttons; rebuilt map as Slay-the-Spire-style connected circular icon nodes; added HeroSelectScreen gating boot and post-run flow; reworked arena to hero-left/enemy-right layout with name banners, inline intent chip, turn-phase stepper, fanned hand with tabletop-style Wild/Enemy Vowel cards, big-hit damage juice, and legible victory/defeat overlay; removed redundant action log and map footer panel.",
+      "updatedAt": "2026-08-03T15:27:56.175Z"
+    },
+    {
+      "id": "WC-016",
+      "title": "Spec, design, and implement a first-run tutorial mode",
+      "status": "done",
+      "priority": "P2",
+      "owner": "",
+      "tags": [
+        "ux",
+        "onboarding"
+      ],
+      "specRefs": [
+        "specs/009-board-game-rules-fidelity/spec.md",
+        "specs/010-tutorial-mode/spec.md"
+      ],
+      "notes": "Implemented step-driven TutorialOverlay (spec 010): step config array, tutorialSeen localStorage flag, replay via Help button in CombatHud. Covers hand, splay left/right, Wild letter input, Enemy Vowel, Items, and enemy intent. Tests cover step-advancement and persisted-seen flag.",
+      "updatedAt": "2026-08-03T15:41:29.944Z"
+    }
+  ]
+}
