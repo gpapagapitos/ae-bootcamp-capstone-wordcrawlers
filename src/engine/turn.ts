@@ -156,6 +156,43 @@ export function useItem(state: RunState, itemId: string): void {
   });
 }
 
+/** Uses a Consumable during Prep (spec 011 RC3/RC5): no energy cost, no per-turn lock, removed from inventory immediately. */
+export function useConsumable(state: RunState, consumableId: string): void {
+  if (state.phase !== "spell") {
+    throw new Error("Consumables can only be used while composing your word.");
+  }
+
+  const index = state.consumables.findIndex((c) => c.def.id === consumableId);
+  if (index === -1) {
+    throw new Error("Unknown consumable.");
+  }
+
+  const [consumable] = state.consumables.splice(index, 1);
+
+  switch (consumable.def.effectType) {
+    case "gainHits":
+      state.pendingItemHits += consumable.def.effectValue;
+      break;
+    case "gainBlocks":
+      state.hero.block += consumable.def.effectValue;
+      break;
+    case "gainEnergy":
+      state.hero.energy = Math.min(
+        MAX_ENERGY,
+        state.hero.energy + consumable.def.effectValue,
+      );
+      break;
+    case "applyHex":
+      state.enemy.hex += consumable.def.effectValue;
+      break;
+  }
+
+  state.actionLog.push({
+    turn: state.turn,
+    message: `Used consumable ${consumable.def.name}: ${consumable.def.description}`,
+  });
+}
+
 /** Core word-submission logic shared by hand-typed words and pre-resolved composed cards (e.g. with a Wild card). */
 function resolveSubmittedWord(
   state: RunState,

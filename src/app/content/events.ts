@@ -19,6 +19,8 @@ export interface EventChoice {
   cardEffect?: EventCardEffect;
   /** Applied once at the start of the player's next encounter, then consumed. */
   buff?: EventBuff;
+  /** Grants a starter-pool Consumable by id if the player doesn't already own one and isn't at cap (spec 011 RC4). */
+  grantConsumableId?: string;
   /** Only offered when the current run's hero matches; hidden otherwise. */
   heroOnly?: HeroId;
 }

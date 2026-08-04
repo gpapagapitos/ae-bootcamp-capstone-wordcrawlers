@@ -100,6 +100,20 @@ export interface ItemInstance {
   spent: boolean;
 }
 
+/** Consumables (spec 011 RC3): a digital-only, no-rulebook-equivalent tier — no energy cost, no per-turn lock, removed from inventory the instant they're used. */
+export interface ConsumableDef {
+  id: string;
+  name: string;
+  rarity: 1 | 2 | 3;
+  effectType: ItemEffectType;
+  effectValue: number;
+  description: string;
+}
+
+export interface ConsumableInstance {
+  def: ConsumableDef;
+}
+
 export interface DeckZones {
   draw: Card[];
   hand: Card[];
@@ -132,6 +146,8 @@ export interface RunState {
   /** Always-available Enemy Vowel pseudo-card while true (spec 009 R5); fatigues (false) after use. */
   enemyVowelAvailable: boolean;
   items: ItemInstance[];
+  /** Consumables acquired mid-run (spec 011 RC4); empty at run start. */
+  consumables: ConsumableInstance[];
   actionLog: ActionLogEntry[];
   dictionaryMode: "strict";
 }

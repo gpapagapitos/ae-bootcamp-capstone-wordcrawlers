@@ -2,7 +2,8 @@
 
 ## Status
 
-Draft
+Implemented — see `tasks.md` for phase-by-phase status; in-browser verification (Phase D)
+deferred to a follow-up pass.
 
 ## Source of Truth
 

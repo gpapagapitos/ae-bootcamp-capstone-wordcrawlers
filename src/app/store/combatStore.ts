@@ -3,11 +3,12 @@ import {
   passTurn,
   runPrepPhase,
   submitComposedCards,
+  useConsumable as engineUseConsumable,
   useItem as engineUseItem,
 } from "../../engine/turn.js";
 import { createInitialRunState } from "../../engine/state.js";
 import { createRng, shuffleInPlace } from "../../engine/rng.js";
-import type { Card } from "../../engine/types.js";
+import type { Card, ConsumableDef, ItemDef } from "../../engine/types.js";
 import type { HeroId, RunState, SplayDirection } from "../../engine/types.js";
 import type { EventBuff } from "../content/events.js";
 
@@ -31,6 +32,8 @@ interface CombatState {
     heroHp?: number,
     heroMaxHp?: number,
     pendingBuff?: EventBuff | null,
+    acquiredRelics?: ItemDef[],
+    consumables?: ConsumableDef[],
   ) => void;
   leaveEncounter: () => void;
   beginSpellPhase: () => void;
@@ -39,6 +42,7 @@ interface CombatState {
   toggleWildCard: () => void;
   toggleEnemyVowelCard: () => void;
   useItem: (itemId: string) => void;
+  useConsumable: (consumableId: string) => void;
   undoComposedLetter: () => void;
   clearComposedWord: () => void;
   setSplay: (splay: SplayDirection) => void;
@@ -65,8 +69,16 @@ function createEncounterState(
   heroHp?: number,
   heroMaxHp?: number,
   pendingBuff?: EventBuff | null,
+  acquiredRelics: ItemDef[] = [],
+  consumables: ConsumableDef[] = [],
 ): RunState {
-  const run = createInitialRunState(seed, heroId, boon);
+  const run = createInitialRunState(
+    seed,
+    heroId,
+    boon,
+    acquiredRelics,
+    consumables.map((def) => ({ def })),
+  );
   if (heroMaxHp !== undefined) {
     run.hero.maxHp = heroMaxHp;
   }
@@ -126,6 +138,8 @@ export const useCombatStore = create<CombatState>((set, get) => ({
     heroHp,
     heroMaxHp,
     pendingBuff,
+    acquiredRelics,
+    consumables,
   ) => {
     const resolvedHeroId = heroId ?? get().heroId;
     set({
@@ -138,6 +152,8 @@ export const useCombatStore = create<CombatState>((set, get) => ({
         heroHp,
         heroMaxHp,
         pendingBuff,
+        acquiredRelics,
+        consumables,
       ),
       heroId: resolvedHeroId,
       composedCardIds: [],
@@ -277,6 +293,23 @@ export const useCombatStore = create<CombatState>((set, get) => ({
       set({
         lastError:
           error instanceof Error ? error.message : "Failed to use item.",
+      });
+    }
+  },
+
+  useConsumable: (consumableId: string) => {
+    const run = get().run;
+    if (!run || run.phase !== "spell") {
+      return;
+    }
+
+    try {
+      engineUseConsumable(run, consumableId);
+      set({ run: { ...run }, lastError: null });
+    } catch (error) {
+      set({
+        lastError:
+          error instanceof Error ? error.message : "Failed to use consumable.",
       });
     }
   },

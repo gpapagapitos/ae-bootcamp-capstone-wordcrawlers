@@ -429,8 +429,13 @@ Implemented in engine + app layer:
 - R9 Relics: `createHeroRelics` grants each hero 1 no-cost, auto-triggering Relic
   (`RelicTrigger`: `onStageFlip` / `onWordWithoutWild`), applied via `applyRelicEffect` in
   `combat.ts` at the matching hook (`applyStageFlipIfDefeated`, the no-Wild-bonus branch
-  of `resolveClash`). Boss Relics and a reward/shop acquisition flow for Relics are still
-  not modeled (see remaining gaps).
+  of `resolveClash`). **Boss Relics and a full reward/shop acquisition flow are now
+  implemented — see `specs/011-relics-and-consumables/spec.md` (RC1/RC2):**
+  `createBossRelicPool`/`createStandardRelicPool` in `cards.ts`, boss-victory Character
+  Development offers a mandatory 1-of-2 Boss Relic choice, non-boss victories have a
+  30% chance to additionally offer a 1-of-2 double-sided Standard Relic. Spec 011 also
+  adds a new digital-only **Consumable** item tier on top of this gap (no rulebook
+  equivalent, same category of invention as Energy).
 - R10 Shop now prices and pays in boons (gold currency removed) and **replaces** a
   player-selected deck card instead of always adding one (`buyShopCard(cardId,
 replaceCardId)`, `ShopModal.tsx` replace-target selection UI).
@@ -449,7 +454,7 @@ Remaining gaps (tracked for a follow-up pass):
   per-turn `usedThisTurn` reset is not modeled (no relic-vs-item rotation state yet).
 - R9 Boss Relics content, and a reward/shop flow that _grants_ additional Relics
   mid-run, do not exist yet — each hero's single Relic is fixed at run start alongside
-  their 2 Core Items, not acquired. **Tracked in `specs/011-relics-and-consumables/spec.md`**,
+  their 2 Core Items, not acquired. **Closed by `specs/011-relics-and-consumables/spec.md`**,
   which also adds a new digital-only Consumable item tier (no rulebook equivalent, same
   category of invention as Energy) on top of this gap.
 - R10/R8: Reward-card pickup (`pickReward`) still always **adds** a card rather than

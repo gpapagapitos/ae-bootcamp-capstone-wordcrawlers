@@ -1,14 +1,33 @@
 import { create } from "zustand";
 import { createInitialRunState } from "../../engine/state.js";
-import { createLetterCard, upgradeCard } from "../../engine/cards.js";
-import type { Card, HeroId, RunState } from "../../engine/types.js";
+import {
+  createBossRelicPool,
+  createLetterCard,
+  createStandardRelicPool,
+  createStarterConsumablePool,
+  upgradeCard,
+} from "../../engine/cards.js";
+import type { StandardRelicOption } from "../../engine/cards.js";
+import type {
+  Card,
+  ConsumableDef,
+  HeroId,
+  ItemDef,
+  RunState,
+} from "../../engine/types.js";
 import { pickEvent } from "../content/events.js";
 import type { EventBuff, EventChoice, EventDef } from "../content/events.js";
 
-type ModalType = "reward" | "shop" | "rest" | "event" | null;
+type ModalType = "reward" | "shop" | "rest" | "event" | "bossReward" | null;
 
 const STARTING_HP = 20;
 export const REST_HEAL_AMOUNT = 8;
+/** Chance a non-boss battle/elite victory also offers a Standard Relic (spec 011 RC2, user-approved). */
+const RELIC_REWARD_CHANCE = 0.3;
+/** Consumable inventory cap (spec 011 RC4, user-approved). */
+export const CONSUMABLE_CAP = 3;
+/** Shop price for a Consumable, common/uncommon tier (spec 011 RC4, user-approved). */
+export const CONSUMABLE_PRICE = 6;
 
 interface ProgressionState {
   heroId: HeroId;
@@ -16,9 +35,14 @@ interface ProgressionState {
   heroHp: number;
   heroMaxHp: number;
   runDeck: Card[];
+  acquiredRelics: ItemDef[];
+  consumables: ConsumableDef[];
+  bossRelicOptions: ItemDef[];
+  standardRelicOptions: StandardRelicOption[];
   activeModal: ModalType;
   rewardOptions: Card[];
   shopOffers: Card[];
+  shopConsumableOffer: ConsumableDef | null;
   restCardOptions: Card[];
   eventDef: EventDef | null;
   eventResult: string | null;
@@ -28,11 +52,15 @@ interface ProgressionState {
   initializeRunDeck: (heroId?: HeroId, seed?: number) => void;
   syncDeckFromEncounter: (run: RunState) => void;
   openRewardModal: (seed?: number) => void;
+  openBossRelicModal: (seed?: number) => void;
   openShopModal: (seed?: number) => void;
   openRestModal: (seed?: number) => void;
   openEventModal: (seed?: number) => void;
   pickReward: (cardId: string) => void;
+  chooseStandardRelic: (baseId: string, side: "a" | "b") => void;
+  chooseBossRelic: (relicId: string) => void;
   buyShopCard: (cardId: string, replaceCardId: string) => void;
+  buyShopConsumable: () => void;
   removeDeckCard: (cardId: string) => void;
   chooseRestHeal: () => void;
   chooseRestUpgrade: (cardId: string) => void;
@@ -184,9 +212,14 @@ export const useProgressionStore = create<ProgressionState>((set, get) => ({
   heroHp: STARTING_HP,
   heroMaxHp: STARTING_HP,
   runDeck: [],
+  acquiredRelics: [],
+  consumables: [],
+  bossRelicOptions: [],
+  standardRelicOptions: [],
   activeModal: null,
   rewardOptions: [],
   shopOffers: [],
+  shopConsumableOffer: null,
   restCardOptions: [],
   eventDef: null,
   eventResult: null,
@@ -206,6 +239,8 @@ export const useProgressionStore = create<ProgressionState>((set, get) => ({
       heroHp: run.hero.maxHp,
       heroMaxHp: run.hero.maxHp,
       runDeck: encounterDeckToRunDeck(run),
+      acquiredRelics: [],
+      consumables: [],
       initialized: true,
       activeModal: null,
       rewardOptions: [],
@@ -219,20 +254,58 @@ export const useProgressionStore = create<ProgressionState>((set, get) => ({
       boon: run.hero.boon,
       heroHp: run.hero.hp,
       heroMaxHp: run.hero.maxHp,
+      consumables: run.consumables.map((instance) => instance.def),
     });
   },
 
   openRewardModal: (seed = Date.now()) => {
+    const state = get();
+    const ownedRelicIds = new Set(state.acquiredRelics.map((def) => def.id));
+    const rollsRelic = rotateIndex(seed, 991, 100) / 100 < RELIC_REWARD_CHANCE;
+    const standardRelicOptions = rollsRelic
+      ? createStandardRelicPool().filter(
+          (option) =>
+            !ownedRelicIds.has(option.sideA.id) &&
+            !ownedRelicIds.has(option.sideB.id),
+        )
+      : [];
+
     set({
       activeModal: "reward",
-      rewardOptions: buildRewardOptions(seed, get().heroId),
+      rewardOptions: buildRewardOptions(seed, state.heroId),
+      standardRelicOptions,
+    });
+  },
+
+  openBossRelicModal: (seed = Date.now()) => {
+    const state = get();
+    const ownedRelicIds = new Set(state.acquiredRelics.map((def) => def.id));
+    const bossRelicOptions = createBossRelicPool().filter(
+      (def) => !ownedRelicIds.has(def.id),
+    );
+
+    set({
+      activeModal: "bossReward",
+      bossRelicOptions,
+      rewardOptions: buildRewardOptions(seed, state.heroId),
     });
   },
 
   openShopModal: (seed = Date.now()) => {
+    const state = get();
+    const ownedConsumableIds = new Set(state.consumables.map((def) => def.id));
+    const consumablePool = createStarterConsumablePool().filter(
+      (def) => !ownedConsumableIds.has(def.id),
+    );
+    const shopConsumableOffer =
+      consumablePool.length > 0
+        ? consumablePool[rotateIndex(seed, 7, consumablePool.length)]
+        : null;
+
     set({
       activeModal: "shop",
-      shopOffers: buildShopOffers(seed, get().heroId),
+      shopOffers: buildShopOffers(seed, state.heroId),
+      shopConsumableOffer,
     });
   },
 
@@ -275,6 +348,37 @@ export const useProgressionStore = create<ProgressionState>((set, get) => ({
     set({
       runDeck: [...state.runDeck, card],
       rewardOptions: [],
+      standardRelicOptions: [],
+      activeModal: null,
+    });
+  },
+
+  chooseStandardRelic: (baseId, side) => {
+    const state = get();
+    const option = state.standardRelicOptions.find(
+      (item) => item.baseId === baseId,
+    );
+    if (!option) {
+      return;
+    }
+
+    const chosen = side === "a" ? option.sideA : option.sideB;
+    set({
+      acquiredRelics: [...state.acquiredRelics, chosen],
+      standardRelicOptions: [],
+    });
+  },
+
+  chooseBossRelic: (relicId) => {
+    const state = get();
+    const relic = state.bossRelicOptions.find((item) => item.id === relicId);
+    if (!relic) {
+      return;
+    }
+
+    set({
+      acquiredRelics: [...state.acquiredRelics, relic],
+      bossRelicOptions: [],
       activeModal: null,
     });
   },
@@ -322,6 +426,23 @@ export const useProgressionStore = create<ProgressionState>((set, get) => ({
     set({
       boon: state.boon - REMOVE_CARD_PRICE,
       runDeck: state.runDeck.filter((card) => card.id !== cardId),
+    });
+  },
+
+  buyShopConsumable: () => {
+    const state = get();
+    if (
+      !state.shopConsumableOffer ||
+      state.boon < CONSUMABLE_PRICE ||
+      state.consumables.length >= CONSUMABLE_CAP
+    ) {
+      return;
+    }
+
+    set({
+      boon: state.boon - CONSUMABLE_PRICE,
+      consumables: [...state.consumables, state.shopConsumableOffer],
+      shopConsumableOffer: null,
     });
   },
 
@@ -391,6 +512,20 @@ export const useProgressionStore = create<ProgressionState>((set, get) => ({
       runDeck = [...runDeck, createCursedCard(runDeck.length)];
     }
 
+    let consumables = state.consumables;
+    if (
+      choice.grantConsumableId &&
+      consumables.length < CONSUMABLE_CAP &&
+      !consumables.some((def) => def.id === choice.grantConsumableId)
+    ) {
+      const granted = createStarterConsumablePool().find(
+        (def) => def.id === choice.grantConsumableId,
+      );
+      if (granted) {
+        consumables = [...consumables, granted];
+      }
+    }
+
     set({
       heroHp: Math.max(
         0,
@@ -398,6 +533,7 @@ export const useProgressionStore = create<ProgressionState>((set, get) => ({
       ),
       boon: Math.max(0, state.boon + (choice.deltaBoon ?? 0)),
       runDeck,
+      consumables,
       pendingBuff: choice.buff ?? state.pendingBuff,
       eventResult: choice.outcomeText,
       eventResultEffects: choice,
@@ -417,6 +553,9 @@ export const useProgressionStore = create<ProgressionState>((set, get) => ({
       activeModal: null,
       rewardOptions: [],
       shopOffers: [],
+      shopConsumableOffer: null,
+      standardRelicOptions: [],
+      bossRelicOptions: [],
       restCardOptions: [],
       eventDef: null,
       eventResult: null,
@@ -432,9 +571,14 @@ export const useProgressionStore = create<ProgressionState>((set, get) => ({
       heroHp: run.hero.maxHp,
       heroMaxHp: run.hero.maxHp,
       runDeck: encounterDeckToRunDeck(run),
+      acquiredRelics: [],
+      consumables: [],
       activeModal: null,
       rewardOptions: [],
       shopOffers: [],
+      shopConsumableOffer: null,
+      standardRelicOptions: [],
+      bossRelicOptions: [],
       restCardOptions: [],
       eventDef: null,
       eventResult: null,

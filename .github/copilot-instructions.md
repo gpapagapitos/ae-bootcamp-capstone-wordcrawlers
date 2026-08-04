@@ -33,6 +33,8 @@ development. Read them before generating specs, plans, or implementation:
 - **Balance-affecting changes need explicit user sign-off before implementing** — e.g.
   hero HP/energy baselines, damage numbers, enemy stats. Flag the gap and ask; don't
   "fix" a stat mismatch against the rulebook on your own initiative.
+  All current baselines and their rationale are documented in
+  [specs/012-game-balance-baseline/spec.md](../specs/012-game-balance-baseline/spec.md).
 - When adapting a new rulebook mechanic, update `specs/009-board-game-rules-fidelity/spec.md`
   (add/amend a rule + acceptance criteria) before or alongside the engine change, and
   cross-check specs 001-008 for now-contradicted requirements instead of leaving stale text.

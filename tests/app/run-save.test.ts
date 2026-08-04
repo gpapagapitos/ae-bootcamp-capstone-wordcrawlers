@@ -51,9 +51,14 @@ function createPayload(seed: number): RunSavePayload {
       heroHp: 50,
       heroMaxHp: 50,
       runDeck: createInitialRunState(seed, "duelist").deck.draw,
+      acquiredRelics: [],
+      consumables: [],
+      bossRelicOptions: [],
+      standardRelicOptions: [],
       activeModal: null,
       rewardOptions: [],
       shopOffers: [],
+      shopConsumableOffer: null,
       restCardOptions: [],
       eventDef: null,
       eventResult: null,
@@ -80,6 +85,48 @@ describe("run save persistence", () => {
 
     expect(load.slot).toBe("current");
     expect(load.payload).toEqual(payload);
+  });
+
+  it("round-trips acquired Relics and Consumables (spec 011 RC6)", () => {
+    const storage = new MemoryStorage();
+    const payload = createPayload(101);
+    payload.progression.acquiredRelics = [
+      {
+        id: "boss-relic-vaultwardens-seal",
+        name: "Vault Warden's Seal",
+        energyCost: 0,
+        isRelic: true,
+        singleUse: false,
+        effectType: "applyHex",
+        effectValue: 2,
+        trigger: "onStageFlip",
+        description: "test",
+      },
+    ];
+    payload.progression.consumables = [
+      {
+        id: "consumable-cinder-draught",
+        name: "Cinder Draught",
+        rarity: 2,
+        effectType: "gainBlocks",
+        effectValue: 2,
+        description: "test",
+      },
+    ];
+
+    saveRunSnapshot(payload, storage);
+    const load = loadRunSnapshot(storage);
+
+    expect(load.ok).toBe(true);
+    if (!load.ok) {
+      throw new Error("expected successful load");
+    }
+    expect(load.payload.progression.acquiredRelics).toEqual(
+      payload.progression.acquiredRelics,
+    );
+    expect(load.payload.progression.consumables).toEqual(
+      payload.progression.consumables,
+    );
   });
 
   it("falls back to previous slot when current is corrupted", () => {

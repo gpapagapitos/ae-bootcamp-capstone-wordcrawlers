@@ -1,10 +1,12 @@
 import { describe, expect, it } from "vitest";
+import { createStarterConsumablePool } from "../../src/engine/cards.js";
 import { createInitialRunState } from "../../src/engine/state.js";
 import {
   passTurn,
   runPrepPhase,
   submitComposedCards,
   submitWord,
+  useConsumable,
   useItem,
 } from "../../src/engine/turn.js";
 import type { Card } from "../../src/engine/types.js";
@@ -144,5 +146,33 @@ describe("turn flow", () => {
 
     expect(state.hero.energy).toBe(energyBefore - item.def.energyCost);
     expect(state.items[0].usedThisTurn).toBe(true);
+  });
+
+  it("applies a consumable's effect and removes it from inventory (spec 011 RC3/RC5)", () => {
+    const [cinderDraught] = createStarterConsumablePool();
+    const state = createInitialRunState(10, "duelist", 0, [], [
+      { def: cinderDraught },
+    ]);
+    runPrepPhase(state);
+    const blockBefore = state.hero.block;
+
+    useConsumable(state, cinderDraught.id);
+
+    expect(state.hero.block).toBe(blockBefore + cinderDraught.effectValue);
+    expect(state.consumables).toHaveLength(0);
+  });
+
+  it("rejects using the same consumable twice", () => {
+    const [cinderDraught] = createStarterConsumablePool();
+    const state = createInitialRunState(10, "duelist", 0, [], [
+      { def: cinderDraught },
+    ]);
+    runPrepPhase(state);
+
+    useConsumable(state, cinderDraught.id);
+
+    expect(() => useConsumable(state, cinderDraught.id)).toThrow(
+      "Unknown consumable.",
+    );
   });
 });

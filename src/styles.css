@@ -46,6 +46,7 @@
 }
 
 @keyframes hitShake {
+
   0%,
   100% {
     transform: translateX(0);
@@ -69,6 +70,7 @@
 }
 
 @keyframes arenaImpactShake {
+
   0%,
   100% {
     transform: translate(0, 0);
@@ -162,6 +164,7 @@
 }
 
 @keyframes lowHpPulse {
+
   0%,
   100% {
     filter: brightness(1);
@@ -173,6 +176,7 @@
 }
 
 @keyframes nodePulse {
+
   0%,
   100% {
     box-shadow: 0 0 20px rgba(201, 143, 82, 0.44);
@@ -201,19 +205,15 @@
    snap it upright mid-animation and then jump back to its tilted resting position. */
 @keyframes handCardSelectPop {
   0% {
-    transform: rotate(var(--tilt, 0deg))
-      translateY(calc(var(--arc-lift, 0px) + var(--hover-lift, 0px)));
+    transform: rotate(var(--tilt, 0deg)) translateY(calc(var(--arc-lift, 0px) + var(--hover-lift, 0px)));
   }
 
   40% {
-    transform: rotate(var(--tilt, 0deg))
-      translateY(calc(var(--arc-lift, 0px) + var(--hover-lift, 0px) - 6px))
-      scale(1.05);
+    transform: rotate(var(--tilt, 0deg)) translateY(calc(var(--arc-lift, 0px) + var(--hover-lift, 0px) - 6px)) scale(1.05);
   }
 
   100% {
-    transform: rotate(var(--tilt, 0deg))
-      translateY(calc(var(--arc-lift, 0px) + var(--hover-lift, 0px)));
+    transform: rotate(var(--tilt, 0deg)) translateY(calc(var(--arc-lift, 0px) + var(--hover-lift, 0px)));
   }
 }
 
@@ -989,6 +989,7 @@ body {
 }
 
 @keyframes nextActionPulse {
+
   0%,
   100% {
     border-color: rgba(163, 69, 47, 0.6);
@@ -2120,8 +2121,7 @@ h1 {
     inset 0 0 0 3px #d6dac2,
     inset 0 0 0 4px rgba(40, 48, 34, 0.35);
   transform-origin: bottom center;
-  transform: rotate(var(--tilt, 0deg))
-    translateY(calc(var(--arc-lift, 0px) + var(--hover-lift, 0px)));
+  transform: rotate(var(--tilt, 0deg)) translateY(calc(var(--arc-lift, 0px) + var(--hover-lift, 0px)));
   transition:
     transform 160ms ease,
     box-shadow 160ms ease,
@@ -2130,7 +2130,7 @@ h1 {
   margin-left: -20px;
 }
 
-.hand-cards > *:first-child {
+.hand-cards>*:first-child {
   margin-left: 0;
 }
 
@@ -2168,9 +2168,7 @@ h1 {
 }
 
 .hand-card:active:not(:disabled) {
-  transform: rotate(var(--tilt, 0deg))
-    translateY(calc(var(--arc-lift, 0px) + var(--hover-lift, 0px) + 2px))
-    scale(0.97);
+  transform: rotate(var(--tilt, 0deg)) translateY(calc(var(--arc-lift, 0px) + var(--hover-lift, 0px) + 2px)) scale(0.97);
 }
 
 .hand-card-edges {
@@ -2244,6 +2242,21 @@ p.hand-letter {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+/* Consumables are visually distinct from Items (spec 011 RC5): no energy cost, single-use. */
+.consumables-row .consumable-button {
+  background: var(--event);
+  color: #e9e4cf;
+  box-shadow: 0 3px 0 #1f4237;
+}
+
+.consumables-row .consumable-button:hover:not(:disabled) {
+  box-shadow: 0 4px 0 #1f4237;
+}
+
+.consumables-row .consumable-button:active:not(:disabled) {
+  box-shadow: 0 1px 0 #1f4237;
 }
 
 .hero-abilities-panel {
@@ -2375,6 +2388,7 @@ p.hand-letter {
 }
 
 @keyframes castWordReadyPulse {
+
   0%,
   100% {
     box-shadow: 0 4px 0 #4a1c1c;
@@ -2606,6 +2620,43 @@ p.hand-letter {
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
+}
+
+.reward-relic-section {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 2px solid var(--panel-edge);
+}
+
+.reward-relic-section h3 {
+  margin: 0 0 4px;
+  font-family: "Germania One", serif;
+  color: var(--gold);
+}
+
+.reward-relic-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.reward-relic-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 220px;
+  padding: 10px;
+  border: 2px solid #171d16;
+  border-radius: 4px;
+  background: var(--panel);
+  box-shadow: 0 3px 0 rgba(23, 29, 22, 0.55);
+}
+
+.reward-relic-name {
+  margin: 0;
+  font-family: "Germania One", serif;
+  font-weight: 700;
 }
 
 /* Real playing-card proportions, matching the in-hand card face instead of a flat square chip. */

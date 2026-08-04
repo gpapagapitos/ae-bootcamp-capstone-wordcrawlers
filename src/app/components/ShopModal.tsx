@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { getEdge } from "../../engine/cards.js";
-import type { Card } from "../../engine/types.js";
+import type { Card, ConsumableDef } from "../../engine/types.js";
 import { getCardDisplayName, getCardPrice } from "../store/progressionStore.js";
 
 interface ShopModalProps {
@@ -10,6 +10,10 @@ interface ShopModalProps {
   onBuy: (cardId: string, replaceCardId: string) => void;
   onRemove: (cardId: string) => void;
   onClose: () => void;
+  /** Consumable offer (spec 011 RC4): optional, priced flat, no deck-replace target needed. */
+  consumableOffer?: ConsumableDef | null;
+  consumablePrice?: number;
+  onBuyConsumable?: () => void;
 }
 
 /** Stacked hit/block/energy icons shown at the center of the card face (Paperback Adventures card anatomy). */
@@ -57,6 +61,9 @@ export function ShopModal({
   onBuy,
   onRemove,
   onClose,
+  consumableOffer,
+  consumablePrice = 0,
+  onBuyConsumable,
 }: ShopModalProps) {
   const [replaceTargetId, setReplaceTargetId] = useState<string | null>(null);
   const replaceableDeck = deck.filter((card) => card.kind !== "penalty");
@@ -167,6 +174,20 @@ export function ShopModal({
             </ul>
           </div>
         </div>
+
+        {consumableOffer ? (
+          <div className="reward-relic-section">
+            <h3>Consumable: {consumableOffer.name}</h3>
+            <p>{consumableOffer.description}</p>
+            <button
+              className="ink-button shop-card-buy"
+              onClick={onBuyConsumable}
+              disabled={boon < consumablePrice}
+            >
+              Buy ({consumablePrice})
+            </button>
+          </div>
+        ) : null}
 
         <footer className="modal-footer">
           <button className="ink-button" onClick={onClose}>

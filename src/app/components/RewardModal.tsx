@@ -1,11 +1,18 @@
 import { getEdge } from "../../engine/cards.js";
-import type { Card } from "../../engine/types.js";
+import type { StandardRelicOption } from "../../engine/cards.js";
+import type { Card, ItemDef } from "../../engine/types.js";
 import { getCardDisplayName } from "../store/progressionStore.js";
 
 interface RewardModalProps {
   options: Card[];
   onPick: (cardId: string) => void;
   onClose: () => void;
+  /** Standard Relic reward (spec 011 RC2): optional, additive, offered alongside the card reward. */
+  relicOptions?: StandardRelicOption[];
+  onPickRelicSide?: (baseId: string, side: "a" | "b") => void;
+  /** Boss Relic reward (spec 011 RC1): mandatory pick of exactly one, offered on boss victory. */
+  bossRelicOptions?: ItemDef[];
+  onPickBossRelic?: (relicId: string) => void;
 }
 
 /** Stacked hit/block/energy icons shown at the center of the card face (Paperback Adventures card anatomy). */
@@ -46,7 +53,17 @@ function CardCorner({
   );
 }
 
-export function RewardModal({ options, onPick, onClose }: RewardModalProps) {
+export function RewardModal({
+  options,
+  onPick,
+  onClose,
+  relicOptions = [],
+  onPickRelicSide,
+  bossRelicOptions = [],
+  onPickBossRelic,
+}: RewardModalProps) {
+  const hasBossRelicChoice = bossRelicOptions.length > 0;
+
   return (
     <div className="modal-overlay" role="presentation">
       <section
@@ -83,11 +100,60 @@ export function RewardModal({ options, onPick, onClose }: RewardModalProps) {
           ))}
         </div>
 
-        <footer className="modal-footer">
-          <button className="ink-button ink-button-ghost" onClick={onClose}>
-            Skip
-          </button>
-        </footer>
+        {relicOptions.length > 0 ? (
+          <div className="reward-relic-section">
+            <h3>A Relic glints among the spoils</h3>
+            <p>Choose a Relic and permanently pick one of its two sides.</p>
+            <div className="reward-relic-grid">
+              {relicOptions.map((option) => (
+                <article key={option.baseId} className="reward-relic-card">
+                  <p className="reward-relic-name">{option.name}</p>
+                  <button
+                    className="ink-button ink-button-ghost"
+                    onClick={() => onPickRelicSide?.(option.baseId, "a")}
+                  >
+                    {option.sideA.name}: {option.sideA.description}
+                  </button>
+                  <button
+                    className="ink-button ink-button-ghost"
+                    onClick={() => onPickRelicSide?.(option.baseId, "b")}
+                  >
+                    {option.sideB.name}: {option.sideB.description}
+                  </button>
+                </article>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
+        {hasBossRelicChoice ? (
+          <div className="reward-relic-section">
+            <h3>Character Development: Boss Relic</h3>
+            <p>Pick exactly one Boss Relic before you continue.</p>
+            <div className="reward-relic-grid">
+              {bossRelicOptions.map((relic) => (
+                <article key={relic.id} className="reward-relic-card">
+                  <p className="reward-relic-name">{relic.name}</p>
+                  <p>{relic.description}</p>
+                  <button
+                    className="ink-button shop-card-buy"
+                    onClick={() => onPickBossRelic?.(relic.id)}
+                  >
+                    Take Relic
+                  </button>
+                </article>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
+        {!hasBossRelicChoice ? (
+          <footer className="modal-footer">
+            <button className="ink-button ink-button-ghost" onClick={onClose}>
+              Skip
+            </button>
+          </footer>
+        ) : null}
       </section>
     </div>
   );

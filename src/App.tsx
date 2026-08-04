@@ -22,6 +22,7 @@ import type { HeroId } from "./engine/types.js";
 import { useCombatStore } from "./app/store/combatStore.js";
 import { useMapStore } from "./app/store/mapStore.js";
 import {
+  CONSUMABLE_PRICE,
   REST_HEAL_AMOUNT,
   useProgressionStore,
 } from "./app/store/progressionStore.js";
@@ -60,6 +61,7 @@ export function App() {
     activeModal,
     rewardOptions,
     shopOffers,
+    shopConsumableOffer,
     restCardOptions,
     eventDef,
     eventResult,
@@ -69,13 +71,21 @@ export function App() {
     heroHp,
     heroMaxHp,
     pendingBuff,
+    acquiredRelics,
+    consumables,
+    bossRelicOptions,
+    standardRelicOptions,
     initializeRunDeck,
     openRewardModal,
+    openBossRelicModal,
     openShopModal,
     openRestModal,
     openEventModal,
     pickReward,
+    chooseStandardRelic,
+    chooseBossRelic,
     buyShopCard,
+    buyShopConsumable,
     removeDeckCard,
     chooseRestHeal,
     chooseRestUpgrade,
@@ -133,6 +143,11 @@ export function App() {
     showActionToast("Curse Cleansed", "good");
   };
 
+  const handleChooseBossRelic = (relicId: string) => {
+    chooseBossRelic(relicId);
+    setRunOutcome("victory");
+  };
+
   const snapshot = useMemo<RunSavePayload>(() => {
     const combat = useCombatStore.getState();
     const mapState = useMapStore.getState();
@@ -158,9 +173,14 @@ export function App() {
         heroHp: progression.heroHp,
         heroMaxHp: progression.heroMaxHp,
         runDeck: progression.runDeck,
+        acquiredRelics: progression.acquiredRelics,
+        consumables: progression.consumables,
+        bossRelicOptions: progression.bossRelicOptions,
+        standardRelicOptions: progression.standardRelicOptions,
         activeModal: progression.activeModal,
         rewardOptions: progression.rewardOptions,
         shopOffers: progression.shopOffers,
+        shopConsumableOffer: progression.shopConsumableOffer,
         restCardOptions: progression.restCardOptions,
         eventDef: progression.eventDef,
         eventResult: progression.eventResult,
@@ -178,6 +198,7 @@ export function App() {
     activeModal,
     rewardOptions,
     shopOffers,
+    shopConsumableOffer,
     restCardOptions,
     eventDef,
     eventResult,
@@ -187,6 +208,10 @@ export function App() {
     heroHp,
     heroMaxHp,
     pendingBuff,
+    acquiredRelics,
+    consumables,
+    bossRelicOptions,
+    standardRelicOptions,
     initialized,
   ]);
 
@@ -265,6 +290,8 @@ export function App() {
         heroHp,
         heroMaxHp,
         buff,
+        acquiredRelics,
+        consumables,
       );
       return;
     }
@@ -300,6 +327,8 @@ export function App() {
     boon,
     heroHp,
     heroMaxHp,
+    acquiredRelics,
+    consumables,
     consumePendingBuff,
   ]);
 
@@ -320,9 +349,11 @@ export function App() {
       if (won) {
         syncDeckFromEncounter(run);
         if (node?.type === "boss") {
-          setRunOutcome("victory");
+          openBossRelicModal(Date.now());
+          leaveEncounter();
+          return;
         }
-        if (node && node.type !== "boss") {
+        if (node) {
           openRewardModal(Date.now());
         }
       }
@@ -512,6 +543,17 @@ export function App() {
           options={rewardOptions}
           onPick={pickReward}
           onClose={closeModal}
+          relicOptions={standardRelicOptions}
+          onPickRelicSide={chooseStandardRelic}
+        />
+      ) : null}
+      {activeModal === "bossReward" ? (
+        <RewardModal
+          options={rewardOptions}
+          onPick={pickReward}
+          onClose={closeModal}
+          bossRelicOptions={bossRelicOptions}
+          onPickBossRelic={handleChooseBossRelic}
         />
       ) : null}
       {activeModal === "shop" ? (
@@ -522,6 +564,9 @@ export function App() {
           onBuy={buyShopCard}
           onRemove={removeDeckCard}
           onClose={closeModal}
+          consumableOffer={shopConsumableOffer}
+          consumablePrice={CONSUMABLE_PRICE}
+          onBuyConsumable={buyShopConsumable}
         />
       ) : null}
       {activeModal === "rest" ? (

@@ -1,4 +1,4 @@
-import type { Card, CardEdge, HeroId, ItemDef } from "./types.js";
+import type { Card, CardEdge, ConsumableDef, HeroId, ItemDef } from "./types.js";
 
 /** Derives left/right edge values for a simple letter card (spec 009 R1). */
 export function deriveEdges(
@@ -189,6 +189,155 @@ export function createHeroRelics(heroId: HeroId): ItemDef[] {
       trigger: "onStageFlip",
       description:
         "Passive: apply 1 hex to the enemy the moment it flips to Stage 2.",
+    },
+  ];
+}
+
+/**
+ * Starter Consumable pool (spec 011 RC3, content-canon-checklist pass approved
+ * 2026-08-04). Magnitude 2 (vs. 1 for Core Items/Relics) is the approved sign-off:
+ * a one-shot must hit harder than a single reusable-item activation to be worth
+ * its single use.
+ */
+export function createStarterConsumablePool(): ConsumableDef[] {
+  return [
+    {
+      id: "consumable-cinder-draught",
+      name: "Cinder Draught",
+      rarity: 2,
+      effectType: "gainBlocks",
+      effectValue: 2,
+      description:
+        "A bracing tonic brewed from reclaimed embers. Single-use: gain 2 block this turn.",
+    },
+    {
+      id: "consumable-quickroot-vial",
+      name: "Quickroot Vial",
+      rarity: 2,
+      effectType: "gainEnergy",
+      effectValue: 2,
+      description:
+        "Distilled sap that quickens the hand. Single-use: gain 2 energy this turn.",
+    },
+    {
+      id: "consumable-bitter-needle",
+      name: "Bitter Needle",
+      rarity: 2,
+      effectType: "applyHex",
+      effectValue: 2,
+      description:
+        "A splinter of enemy language, turned back on its source. Single-use: give 2 hex to the enemy.",
+    },
+  ];
+}
+
+/**
+ * Boss Relic pool (spec 011 RC1 / spec 009 R9): single-sided, rarer than Standard
+ * Relics, offered as a mandatory 1-of-2 choice at Character Development after a boss
+ * kill. Magnitude 2 matches the Consumable tier (both are the "rarer, one-shot content
+ * pass" content-canon-approved above the baseline Core Item/Relic magnitude of 1).
+ */
+export function createBossRelicPool(): ItemDef[] {
+  return [
+    {
+      id: "boss-relic-vaultwardens-seal",
+      name: "Vault Warden's Seal",
+      energyCost: 0,
+      isRelic: true,
+      singleUse: false,
+      effectType: "applyHex",
+      effectValue: 2,
+      trigger: "onStageFlip",
+      description:
+        "A boss's broken sigil that still bites at whoever wears it next. Passive (Boss Relic): apply 2 hex to the enemy the moment it flips to Stage 2.",
+    },
+    {
+      id: "boss-relic-vaultwardens-marrow",
+      name: "Vault Warden's Marrow",
+      energyCost: 0,
+      isRelic: true,
+      singleUse: false,
+      effectType: "gainBlocks",
+      effectValue: 2,
+      trigger: "onWordWithoutWild",
+      description:
+        "Armor plating salvaged from a fallen guardian. Passive (Boss Relic): gain 2 block whenever you play a word without the Wild card.",
+    },
+  ];
+}
+
+/** One Standard Relic's two acquisition sides (spec 009 R9: side chosen once, permanently). */
+export interface StandardRelicOption {
+  baseId: string;
+  name: string;
+  sideA: ItemDef;
+  sideB: ItemDef;
+}
+
+/**
+ * Standard Relic pool (spec 011 RC2): double-sided, shared across both heroes (only 2
+ * entries exist yet, so splitting per-hero would leave no real "1 of 2" choice \u2014
+ * tracked as a content-growth gap in clarifications.md). Magnitude 1 matches the
+ * existing Core Relic scale (createHeroRelics), not the rarer Consumable/Boss-Relic
+ * magnitude of 2.
+ */
+export function createStandardRelicPool(): StandardRelicOption[] {
+  return [
+    {
+      baseId: "std-relic-splintercharm",
+      name: "Splinter Charm",
+      sideA: {
+        id: "std-relic-splintercharm-a",
+        name: "Splinter Charm (Edge)",
+        energyCost: 0,
+        isRelic: true,
+        singleUse: false,
+        effectType: "gainHits",
+        effectValue: 1,
+        trigger: "onWordWithoutWild",
+        description:
+          "Passive: gain 1 hit whenever you play a word without the Wild card.",
+      },
+      sideB: {
+        id: "std-relic-splintercharm-b",
+        name: "Splinter Charm (Surge)",
+        energyCost: 0,
+        isRelic: true,
+        singleUse: false,
+        effectType: "gainEnergy",
+        effectValue: 1,
+        trigger: "onStageFlip",
+        description:
+          "Passive: gain 1 energy the moment the enemy flips to Stage 2.",
+      },
+    },
+    {
+      baseId: "std-relic-rootboundcoil",
+      name: "Rootbound Coil",
+      sideA: {
+        id: "std-relic-rootboundcoil-a",
+        name: "Rootbound Coil (Thorn)",
+        energyCost: 0,
+        isRelic: true,
+        singleUse: false,
+        effectType: "applyHex",
+        effectValue: 1,
+        trigger: "onStageFlip",
+        description:
+          "Passive: apply 1 hex to the enemy the moment it flips to Stage 2.",
+      },
+      sideB: {
+        id: "std-relic-rootboundcoil-b",
+        name: "Rootbound Coil (Bark)",
+        energyCost: 0,
+        isRelic: true,
+        singleUse: false,
+        effectType: "gainBlocks",
+        effectValue: 1,
+        trigger: "onWordWithoutWild",
+        description:
+          "Passive: gain 1 block whenever you play a word without the Wild card.",
+      },
     },
   ];
 }

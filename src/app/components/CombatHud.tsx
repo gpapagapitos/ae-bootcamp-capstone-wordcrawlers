@@ -167,6 +167,7 @@ export function CombatHud({ encounterLabel, onBackToMap }: CombatHudProps) {
     toggleWildCard,
     toggleEnemyVowelCard,
     useItem,
+    useConsumable,
     undoComposedLetter,
     clearComposedWord,
     setSplay,
@@ -1047,6 +1048,33 @@ export function CombatHud({ encounterLabel, onBackToMap }: CombatHudProps) {
               ))}
             </div>
           </div>
+          {run.consumables.length > 0 ? (
+            <div className="hero-abilities-panel" aria-label="Consumables">
+              <p className="hero-abilities-label">Consumables</p>
+              <div className="items-row consumables-row">
+                {run.consumables.map((consumable) => (
+                  <button
+                    key={consumable.def.id}
+                    type="button"
+                    className="item-button consumable-button"
+                    disabled={!canCompose}
+                    title={consumable.def.description}
+                    onClick={() => useConsumable(consumable.def.id)}
+                  >
+                    <span className="item-button-name">
+                      {consumable.def.name}
+                    </span>
+                    <span className="item-button-effect">
+                      {formatItemEffect(
+                        consumable.def.effectType,
+                        consumable.def.effectValue,
+                      )}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : null}
           <div className="combat-controls-secondary">
             <button
               type="button"

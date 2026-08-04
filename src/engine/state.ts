@@ -8,8 +8,10 @@ import {
 import { createRng, shuffleInPlace } from "./rng.js";
 import type {
   Card,
+  ConsumableInstance,
   EnemyState,
   HeroId,
+  ItemDef,
   ItemInstance,
   RunState,
 } from "./types.js";
@@ -106,10 +108,18 @@ export function drawCards(state: RunState, amount: number): void {
   }
 }
 
+/**
+ * `extraRelics` are Relics acquired mid-run via reward/Character Development (spec 011
+ * RC1/RC2), layered on top of each hero's fixed base Relic. `consumables` are the
+ * player's acquired Consumable inventory (spec 011 RC3-RC6); empty at run start, only
+ * ever grown via reward/shop/event.
+ */
 export function createInitialRunState(
   seed: number,
   heroId: HeroId,
   boon = 0,
+  extraRelics: ItemDef[] = [],
+  consumables: ConsumableInstance[] = [],
 ): RunState {
   const rng = createRng(seed);
   const deck = buildStarterDeck(heroId);
@@ -121,7 +131,10 @@ export function createInitialRunState(
     spent: false,
   }));
 
-  const relics: ItemInstance[] = createHeroRelics(heroId).map((def) => ({
+  const relics: ItemInstance[] = [
+    ...createHeroRelics(heroId),
+    ...extraRelics,
+  ].map((def) => ({
     def,
     usedThisTurn: false,
     spent: false,
@@ -155,6 +168,7 @@ export function createInitialRunState(
     penaltyPool: createPenaltyPool(),
     enemyVowelAvailable: true,
     items,
+    consumables: consumables.map((instance) => ({ def: instance.def })),
     actionLog: [],
     dictionaryMode: "strict",
   };

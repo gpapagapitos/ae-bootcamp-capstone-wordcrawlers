@@ -1,5 +1,12 @@
 import type { ActMap } from "../map/types.js";
-import type { Card, HeroId, RunState } from "../../engine/types.js";
+import type {
+  Card,
+  ConsumableDef,
+  HeroId,
+  ItemDef,
+  RunState,
+} from "../../engine/types.js";
+import type { StandardRelicOption } from "../../engine/cards.js";
 import type { EventBuff, EventChoice, EventDef } from "../content/events.js";
 
 export const RUN_SAVE_SCHEMA_VERSION = 1;
@@ -25,7 +32,8 @@ export interface CombatSnapshot {
   lastError: string | null;
 }
 
-export type ModalType = "reward" | "shop" | "rest" | "event" | null;
+export type ModalType =
+  "reward" | "shop" | "rest" | "event" | "bossReward" | null;
 
 export interface ProgressionSnapshot {
   heroId: HeroId;
@@ -33,9 +41,14 @@ export interface ProgressionSnapshot {
   heroHp: number;
   heroMaxHp: number;
   runDeck: Card[];
+  acquiredRelics: ItemDef[];
+  consumables: ConsumableDef[];
+  bossRelicOptions: ItemDef[];
+  standardRelicOptions: StandardRelicOption[];
   activeModal: ModalType;
   rewardOptions: Card[];
   shopOffers: Card[];
+  shopConsumableOffer: ConsumableDef | null;
   restCardOptions: Card[];
   eventDef: EventDef | null;
   eventResult: string | null;
