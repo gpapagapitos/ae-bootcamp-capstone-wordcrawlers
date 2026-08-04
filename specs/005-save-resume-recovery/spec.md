@@ -1,7 +1,7 @@
 # Spec 005: Run Save, Resume, and Recovery
 
 ## Status
-Draft
+Implemented — save envelope, checksum, atomic write, current/previous fallback, and typed error reasons complete; see src/app/persistence/
 
 ## Goal
 Ensure players can safely stop and continue a run without losing progress, while preserving deterministic state and handling corrupt/incompatible saves gracefully.

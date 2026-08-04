@@ -1,7 +1,7 @@
 # Spec 008: Hero Kit and Identity Contract
 
 ## Status
-Draft
+Approved — hero identity contract defined; Duelist/Arcanist implementation in backlog (WC-009, WC-010)
 
 ## Goal
 Lock the MVP identity, starting loadout, and balance envelope for the two playable heroes.

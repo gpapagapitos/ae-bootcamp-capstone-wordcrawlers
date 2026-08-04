@@ -1,7 +1,7 @@
 # Spec 002: Content, Bosses, and Loot Identity
 
 ## Status
-Draft
+Approved — content requirements locked; enemy/boss authoring deferred to post-MVP backlog
 
 ## Goal
 Define the minimum content set that makes runs feel like a roguelite, not a prototype.

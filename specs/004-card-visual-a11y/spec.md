@@ -1,7 +1,7 @@
 # Spec 004: Card Visual Language + A11y Contract
 
 ## Status
-Draft
+Implemented — card visual hierarchy, rarity borders, and ability text conventions applied in CardPreview.tsx and styles.css
 
 ## User Story
 As a player, I want cards that look dramatic and memorable while staying instantly readable, so I can make fast decisions without visual strain.

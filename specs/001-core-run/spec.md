@@ -1,7 +1,7 @@
 # Spec 001: Core Run (Word Combat + Deckbuilding)
 
 ## Status
-Draft
+Implemented — phases A–D complete; phase E (integration tests, CI traceability) in progress
 
 ## User Story
 As a player, I want to complete a dungeon run by forming words from my deck so that I can defeat enemies, build a stronger deck, and beat a boss.

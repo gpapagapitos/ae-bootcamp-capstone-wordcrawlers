@@ -1,7 +1,7 @@
 # Spec 006: Meta Progression and Unlock Economy
 
 ## Status
-Draft
+Approved — spec and tasks complete; implementation in backlog (WC-011, WC-012)
 
 ## Goal
 Define a minimal, fair meta progression loop that rewards replay while preserving core run skill expression.

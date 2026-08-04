@@ -1,7 +1,7 @@
 # Spec 009: Board Game Rules Fidelity Contract
 
 ## Status
-Draft
+Approved — supersedes conflicting rules in specs 001–003; splay, hex/boon, top-card fatigue, and Enemy Vowel implemented in src/engine/
 
 ## Source of Truth
 `docs/Paperback_Adventures_rulebook.pdf` (24 pages, full rules + errata). This spec is the

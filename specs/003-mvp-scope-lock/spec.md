@@ -1,7 +1,7 @@
 # Spec 003: MVP Scope Lock
 
 ## Status
-Approved Candidate
+Approved — all decisions locked; see .specify/memory/decisions.md for full record
 
 ## Purpose
 Freeze MVP boundaries so implementation can begin without design drift.

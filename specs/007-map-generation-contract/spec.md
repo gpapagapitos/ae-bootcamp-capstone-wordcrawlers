@@ -1,7 +1,7 @@
 # Spec 007: Map Generation and Node Distribution Contract
 
 ## Status
-Draft
+Approved — contract defined; deterministic map generation in src/app/map/map.ts; fairness enforcement in backlog (WC-008)
 
 ## Goal
 Guarantee fair, replayable, and deterministic map generation for one-act MVP runs.
