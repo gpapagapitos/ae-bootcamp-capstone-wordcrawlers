@@ -58,12 +58,18 @@ export function RestModal({
             <p>Upgrade one card in your deck (+1 value).</p>
             <ul className="deck-list">
               {cardOptions.map((card) => (
-                <li key={card.id}>
-                  <span>
-                    {getCardDisplayName(card)} · Value {card.value}
+                <li key={card.id} className="deck-list-item">
+                  <span className="deck-list-letter">
+                    {card.letter.toUpperCase()}
+                  </span>
+                  <span className="deck-list-info">
+                    <strong>{getCardDisplayName(card)}</strong>
+                    <span className="deck-list-value">
+                      Value {card.value}
+                    </span>
                   </span>
                   <button
-                    className="ink-button"
+                    className="ink-button deck-list-remove"
                     onClick={() => onUpgrade(card.id)}
                   >
                     Upgrade
@@ -71,8 +77,10 @@ export function RestModal({
                 </li>
               ))}
               {cardOptions.length === 0 ? (
-                <li>
-                  <span>No eligible cards to upgrade.</span>
+                <li className="deck-list-item">
+                  <span className="deck-list-info">
+                    No eligible cards to upgrade.
+                  </span>
                 </li>
               ) : null}
             </ul>
