@@ -40,3 +40,20 @@ development. Read them before generating specs, plans, or implementation:
   cross-check specs 001-008 for now-contradicted requirements instead of leaving stale text.
 - Repo memory at `/memories/repo/rules-fidelity.md` tracks the fidelity decision history,
   known gaps, and past implementation passes — check it before starting rules work.
+
+## Local Board Workflow
+
+`docs/board.json` (rendered to `docs/board.md`) is the repo's persistent task board —
+distinct from the in-session todo list, it survives across conversations. When work maps
+to a board item (or should be tracked as one), keep it in sync as you go:
+
+- Starting work on an existing item: `npm run board:move -- --id WC-XXX --status in-progress`.
+- No matching item for ad-hoc work worth tracking: `npm run board:add -- --title "..." --priority P2 --tags foo,bar --refs specs/NNN-.../spec.md`.
+- Meaningful progress or a decision worth recording: `npm run board:note -- --id WC-XXX --note "..."`.
+- Finishing an item: `npm run board:done -- --id WC-XXX` (or `board:move -- --status done`),
+  with a final `--note` summarizing what shipped.
+- After any board mutation, run `npm run board:render` (add/move/note/done already do this
+  automatically) and `npm run board:check` before finishing up, so `docs/board.md` and the
+  integrity check stay green.
+- Don't create/move items for trivial one-off fixes (typos, tiny refactors) — reserve the
+  board for feature/spec-sized work, matching the granularity of existing WC-* entries.
