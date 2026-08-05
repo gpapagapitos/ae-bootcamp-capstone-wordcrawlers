@@ -1039,6 +1039,30 @@ body {
   text-shadow: 0 2px 0 rgba(0, 0, 0, 0.55);
 }
 
+.enemy-beat-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 auto;
+  padding: 6px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.35);
+  color: #f0e8c8;
+}
+
+.enemy-beat-banner-icon {
+  font-size: 1.1rem;
+}
+
+.enemy-beat-banner-text {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
 @keyframes arenaTotalDamagePop {
   0% {
     transform: translate(-50%, -50%) scale(0.4);
@@ -1062,6 +1086,14 @@ body {
   align-items: start;
   gap: 20px;
   width: 100%;
+}
+
+.battlefield-divider {
+  justify-self: center;
+  width: 2px;
+  height: 140px;
+  margin-top: 26px;
+  background: rgba(255, 255, 255, 0.14);
 }
 
 .battlefield-ground {
@@ -1265,6 +1297,10 @@ body {
   color: #b98fd0;
 }
 
+.combatant-boon {
+  color: #e0c478;
+}
+
 .floating-fx {
   position: absolute;
   left: 50%;
@@ -1380,6 +1416,12 @@ body {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+}
+
+.map-title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .eyebrow {
@@ -1879,11 +1921,19 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
 }
 
 .hand-header h2 {
   color: #cad0b8;
+}
+
+.hand-header-left {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
 }
 
 .builder-empty {
@@ -2326,6 +2376,12 @@ p.hand-letter {
 
 .item-button-cost {
   opacity: 0.75;
+}
+
+.item-button-cast {
+  background: #7a2e2e;
+  color: #e9e4cf;
+  box-shadow: 0 3px 0 #4a1c1c;
 }
 
 .combat-controls-secondary {
